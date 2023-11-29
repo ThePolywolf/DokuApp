@@ -1,28 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using DokuApp.Model.Data;
+using DokuApp.Model.UI;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace DokuApp
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         public MainWindow()
         {
             InitializeComponent();
+
+            SudokuMatrix sudokuMatrix = new SudokuMatrix();
+
+            SetGrid(sudokuMatrix.CellData());
+
+            // TODO: Add UserSelection class object
+            // TODO: Add arrow-key controls to move UserSelection
+            // TODO: Add Mouse clicking to change selection
+            // TODO: Add support to set cell values from key-presses and del/backspace
+        }
+
+        public void SetGrid(CellData[][] cellData)
+        {
+            FullGrid.Values.SetGrid(cellData);
         }
     }
 }

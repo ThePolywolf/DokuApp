@@ -1,0 +1,40 @@
+﻿<UserControl x:Class="DokuApp.View.SudokuRow"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DokuApp.View"
+             mc:Ignorable="d" 
+             d:DesignHeight="60" d:DesignWidth="560">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+
+            <ColumnDefinition Width="5"/>
+
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+
+            <ColumnDefinition Width="5"/>
+
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <local:SudokuCell x:Name="c1" Grid.Column="0"/>
+        <local:SudokuCell x:Name="c2" Grid.Column="1"/>
+        <local:SudokuCell x:Name="c3" Grid.Column="2"/>
+
+        <local:SudokuCell x:Name="c4" Grid.Column="4"/>
+        <local:SudokuCell x:Name="c5" Grid.Column="5"/>
+        <local:SudokuCell x:Name="c6" Grid.Column="6"/>
+        
+        <local:SudokuCell x:Name="c7" Grid.Column="8"/>
+        <local:SudokuCell x:Name="c8" Grid.Column="9"/>
+        <local:SudokuCell x:Name="c9" Grid.Column="10"/>
+    </Grid>
+</UserControl>
