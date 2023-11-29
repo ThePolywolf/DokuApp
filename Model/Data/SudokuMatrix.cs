@@ -1,4 +1,6 @@
 ﻿using DokuApp.Model.UI;
+using DokuApp.Model.Builder;
+using System;
 using System.Collections.Generic;
 
 namespace DokuApp.Model.Data
@@ -22,6 +24,11 @@ namespace DokuApp.Model.Data
             }
         }
 
+        public void AddCorner(Tuple<int, int> position, int corner)
+        {
+            _options[corner - 1].Flip(LogicBuilder.Cell(position));
+        }
+
         public CellData[][] CellData()
         {
             CellData[][] data = new CellData[9][];
@@ -32,17 +39,17 @@ namespace DokuApp.Model.Data
 
                 for (int col = 0; col < 9; col++)
                 {
-                    List<int> cornerData = new List<int>();
+                    List<int> cornerData = new();
 
                     for (int corner = 0; corner < 9; corner++)
                     {
-                        if (_options[corner].Truths[row, col])
+                        if (_options[corner].Truths[col, row])
                         {
                             cornerData.Add(corner + 1);
                         }
                     }
 
-                    rowData[col] = new CellData(_values.Matrix[row, col], cornerData.ToArray());
+                    rowData[col] = new CellData(_values.Matrix[col, row], cornerData.ToArray());
                 }
 
                 data[row] = rowData;

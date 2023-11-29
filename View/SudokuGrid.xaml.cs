@@ -1,4 +1,5 @@
 ﻿using DokuApp.Model.UI;
+using System;
 using System.Windows.Controls;
 
 namespace DokuApp.View
@@ -18,7 +19,7 @@ namespace DokuApp.View
             {
                 if (i >= cellData.Length)
                 {
-                    row[i].SetRow(new CellData[] { });
+                    row[i].SetRow(Array.Empty<CellData>());
                     continue;
                 }
 

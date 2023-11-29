@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:DokuApp"
         xmlns:View="clr-namespace:DokuApp.View"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="1000">
+        Title="MainWindow" Height="600" Width="1000"
+        PreviewKeyDown="MainWindow_OnKeyDown">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="60"/>

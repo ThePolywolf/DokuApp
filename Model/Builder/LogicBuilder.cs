@@ -1,6 +1,5 @@
 ﻿using DokuApp.Model.Data;
 using System;
-using System.Linq;
 
 namespace DokuApp.Model.Builder
 {
@@ -13,21 +12,21 @@ namespace DokuApp.Model.Builder
             Box
         }
 
-        public static LogicMatrix? Matrix(Position position, int[] targets)
+        public static LogicMatrix? Matrix(Position position, int target)
         {
             if (position == Position.Row)
             {
-                return Rows(targets);
+                return Row(target);
             }
             
             if (position == Position.Column)
             {
-                return Columns(targets);
+                return Column(target);
             }
 
             if (position == Position.Box)
             {
-                return Boxes(targets);
+                return Box(target);
             }
 
             return null;
@@ -46,73 +45,61 @@ namespace DokuApp.Model.Builder
             return new LogicMatrix(truths);
         }
 
-        public static LogicMatrix Rows(int[] rows)
+        public static LogicMatrix Row(int row)
         {
             bool[,] truths = new bool[9, 9];
 
-            for (int row = 0; row < 9; row++)
-            {
-                bool value = rows.Contains(row);
-
-                for (int column = 0; column < 9; column++)
-                {
-                    truths[row, column] = value;
-                }
-            }
-
-            return new LogicMatrix(truths);
-        }
-
-        public static LogicMatrix Columns(int[] columns)
-        {
-            bool[,] truths = new bool[9, 9];
+            row = Math.Clamp(row, 0, 8);
 
             for (int column = 0; column < 9; column++)
             {
-                bool value = columns.Contains(column);
-
-                for (int row = 0; row < 9; row++)
-                {
-                    truths[row, column] = value;
-                }
+                truths[row, column] = true;
             }
 
             return new LogicMatrix(truths);
         }
 
-        public static LogicMatrix Boxes(int[] boxes)
+        public static LogicMatrix Column(int column)
         {
             bool[,] truths = new bool[9, 9];
 
-            for (int box = 0; box < 9; box++)
+            column = Math.Clamp(column, 0, 8);
+
+            for (int row = 0; row < 9; row++)
             {
-                bool value = boxes.Contains(box);
-
-                for (int cell = 0; cell < 9; cell++)
-                {
-                    int row = (box - (box % 3)) + ((cell - (cell % 3)) / 3);
-                    int column = 3 * (box % 3) + (cell % 3);
-
-                    truths[row, column] = value;
-                }
+                truths[row, column] = true;
             }
 
             return new LogicMatrix(truths);
         }
 
-        public static LogicMatrix Cells(Tuple<int, int>[] cells)
+        public static LogicMatrix Box(int box)
         {
             bool[,] truths = new bool[9, 9];
 
-            foreach (Tuple<int, int> cell in cells)
-            {
-                if (cell.Item1 < 0 || cell.Item1 >= 9 || cell.Item2 < 0 || cell.Item2 >= 9)
-                {
-                    continue;
-                }
+            box = Math.Clamp(box, 0, 8);
 
-                truths[cell.Item1, cell.Item2] = true;
+            for (int cell = 0; cell < 9; cell++)
+            {
+                int row = (box - (box % 3)) + ((cell - (cell % 3)) / 3);
+                int column = 3 * (box % 3) + (cell % 3);
+
+                truths[row, column] = true;
             }
+
+            return new LogicMatrix(truths);
+        }
+
+        public static LogicMatrix Cell(Tuple<int, int> cell)
+        {
+            bool[,] truths = new bool[9, 9];
+
+            if (cell.Item1 < 0 || cell.Item1 >= 9 || cell.Item2 < 0 || cell.Item2 >= 9)
+            {
+                return new LogicMatrix();
+            }
+
+            truths[cell.Item1, cell.Item2] = true;
 
             return new LogicMatrix(truths);
         }
@@ -141,13 +128,13 @@ namespace DokuApp.Model.Builder
         {
             LogicMatrix matrix = All(false);
 
-            int[] row = new int[] { ExtractPosition(Position.Row, cell) };
-            int[] column = new int[] { ExtractPosition(Position.Column, cell) };
-            int[] box = new int[] { ExtractPosition(Position.Box, cell) };
+            int row =  ExtractPosition(Position.Row, cell);
+            int column = ExtractPosition(Position.Column, cell);
+            int box = ExtractPosition(Position.Box, cell);
 
-            matrix.Add(Rows(row));
-            matrix.Add(Columns(column));
-            matrix.Add(Boxes(box));
+            matrix.Add(Row(row));
+            matrix.Add(Column(column));
+            matrix.Add(Box(box));
 
             return matrix;
         }

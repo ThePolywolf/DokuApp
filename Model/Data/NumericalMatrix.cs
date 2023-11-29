@@ -34,29 +34,29 @@ namespace DokuApp.Model.Data
 
         public bool SetCell(Tuple<int, int> cell, int value)
         {
-            int row = cell.Item1;
-            int col = cell.Item2;
+            int col = cell.Item1;
+            int row = cell.Item2;
 
             if (Math.Clamp(row, 0, 9) != row || Math.Clamp(col, 0, 8) != col || Math.Clamp(value, 1, 9) != value)
             {
                 return false;
             }
 
-            _matrix[row, col] = value;
+            _matrix[col, row] = value;
             return true;
         }
 
         public bool DeleteCell(Tuple<int, int> cell)
         {
-            int row = cell.Item1;
-            int col = cell.Item2;
+            int col = cell.Item1;
+            int row = cell.Item2;
 
-            if (Math.Clamp(row, 0, 9) != row || Math.Clamp(col, 0, 8) != col)
+            if (Math.Clamp(row, 0, 8) != row || Math.Clamp(col, 0, 8) != col)
             {
                 return false;
             }
 
-            _matrix[row, col] = 0;
+            _matrix[col, row] = 0;
             return true;
         }
     }

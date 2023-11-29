@@ -10,8 +10,11 @@ namespace DokuApp.View
             InitializeComponent();
         }
 
-        public void SelectSquare(int column, int row)
+        public void SelectSquare(Tuple<int, int> selection)
         {
+            int column = selection.Item1;
+            int row = selection.Item2;
+
             // re-show
             SingleBox.Visibility = System.Windows.Visibility.Visible;
 
