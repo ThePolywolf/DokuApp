@@ -2,7 +2,6 @@
 using DokuApp.Model.Data;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace DokuApp.Model.Solver
 {
@@ -12,37 +11,31 @@ namespace DokuApp.Model.Solver
         {
         }
 
-        public LogicMatrix FindErrors(NumericalMatrix values)
+        public static LogicMatrix FindErrors(NumericalMatrix values)
         {
-            LogicMatrix errors = new LogicMatrix();
+            LogicMatrix errors = new();
 
-            // rows
-            for (int row = 0; row < 9; row++)
+            for (int i = 0; i < 9; i++)
             {
-                int[] rowData = Extractor.NumericRow(values, row);
-                errors.Add(CheckOptions(rowData, row, LogicBuilder.Position.Row));
-            }
+                // rows <= i
+                int[] rowData = Extractor.NumericRow(values, i);
+                errors.Add(CheckOptions(rowData, i, LogicBuilder.Position.Row));
 
-            // columns
-            for (int col = 0; col < 9; col++)
-            {
-                int[] colData = Extractor.NumericColumn(values, col);
-                errors.Add(CheckOptions(colData, col, LogicBuilder.Position.Column));
-            }
+                // columns <= i
+                int[] colData = Extractor.NumericColumn(values, i);
+                errors.Add(CheckOptions(colData, i, LogicBuilder.Position.Column));
 
-            // boxes
-            for (int box = 0; box < 9; box++)
-            {
-                int[] boxData = Extractor.NumericBox(values, box);
-                errors.Add(CheckOptions(boxData, box, LogicBuilder.Position.Box));
+                // boxes <= i
+                int[] boxData = Extractor.NumericBox(values, i);
+                errors.Add(CheckOptions(boxData, i, LogicBuilder.Position.Box));
             }
 
             return errors;
         }
 
-        private LogicMatrix CheckOptions(int[] data, int index, LogicBuilder.Position type)
+        private static LogicMatrix CheckOptions(int[] data, int index, LogicBuilder.Position type)
         {
-            List<Tuple<int, int>> cells = new List<Tuple<int, int>>();
+            List<Tuple<int, int>> cells = new();
 
             for (int i = 1; i < 9; i++)
             {

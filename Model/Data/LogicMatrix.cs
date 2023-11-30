@@ -1,8 +1,10 @@
-﻿namespace DokuApp.Model.Data
+﻿using System;
+
+namespace DokuApp.Model.Data
 {
     public class LogicMatrix
     {
-        private bool[,] _truths;
+        private readonly bool[,] _truths;
 
         public bool[,] Truths { get { return  _truths; } }
 
@@ -120,6 +122,16 @@
             }
 
             return false;
+        }
+
+        public void SetCell(Tuple<int, int> position, bool value)
+        {
+            _truths[position.Item1, position.Item2] = value;
+        }
+
+        public bool IsCellTrue(Tuple<int, int> position)
+        {
+            return _truths[position.Item1, position.Item2];
         }
     }
 }

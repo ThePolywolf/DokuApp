@@ -1,6 +1,5 @@
 ﻿using DokuApp.Model.Data;
 using DokuApp.Model.Solver;
-using DokuApp.Model.Builder;
 using System;
 using System.Windows;
 using System.Windows.Input;
@@ -9,10 +8,9 @@ namespace DokuApp
 {
     public partial class MainWindow : Window
     {
-        private SudokuMatrix _sudokuMatrix;
-        private LogicMatrix _numberPermenance;
-        private UserSelection _selection;
-        private NumericErrors _numericErrors;
+        private readonly SudokuMatrix _sudokuMatrix;
+        private readonly LogicMatrix _numberPermenance;
+        private readonly  UserSelection _selection;
 
         private bool _permenantEntry;
 
@@ -24,7 +22,7 @@ namespace DokuApp
 
             _sudokuMatrix = new SudokuMatrix();
             _numberPermenance = new LogicMatrix();
-            _numericErrors = new NumericErrors();
+            SolverSetup.StartingSudokuLogic(_sudokuMatrix);
             SetGrid();
 
             _selection = new UserSelection();
@@ -38,9 +36,9 @@ namespace DokuApp
 
         public void SetGrid()
         {
-            FullGrid.Values.SetGrid(_sudokuMatrix.CellData());
+            FullGrid.Values.SetGrid(_sudokuMatrix.CellData(_numberPermenance));
 
-            LogicMatrix errors = _numericErrors.FindErrors(_sudokuMatrix.Values);
+            LogicMatrix errors = NumericErrors.FindErrors(_sudokuMatrix.Values);
             FullGrid.Errors.SetErrorCells(errors);
         }
 
@@ -95,15 +93,13 @@ namespace DokuApp
                 Tuple<int, int> position = _selection.SingleSelection;
 
                 // if not in permenance mode, can't delete a permenant cell
-                if (!_permenantEntry)
+                if (!_permenantEntry && _numberPermenance.IsCellTrue(position))
                 {
-                    if (_numberPermenance.Truths[position.Item1, position.Item2])
-                    {
-                        return;
-                    }
+                    return;
                 }
 
                 _sudokuMatrix.Values.DeleteCell(position);
+                _numberPermenance.SetCell(position, false);
                 SetGrid();
 
                 return;
@@ -120,12 +116,9 @@ namespace DokuApp
             Tuple<int, int> position = _selection.SingleSelection;
 
             // can only change non-permenant cells if not in permenance mode
-            if (!_permenantEntry)
+            if (!_permenantEntry && _numberPermenance.IsCellTrue(position))
             {
-                if (_numberPermenance.Truths[position.Item1, position.Item2])
-                {
-                    return;
-                }
+                return;
             }
 
             // targets corner possibilities if shifted
@@ -144,7 +137,23 @@ namespace DokuApp
             }
 
             _sudokuMatrix.Values.SetCell(position, number);
-            if (_permenantEntry) _numberPermenance.Add(LogicBuilder.Cell(position));
+            _numberPermenance.SetCell(position, _permenantEntry);
+
+            Strategy[] strategies =
+            {
+                new SudokuStrategy(),
+                new SinglesStrategy()
+            };
+            
+            for (int i = 0; i < strategies.Length; i++)
+            {
+                bool result = strategies[i].Solve(_sudokuMatrix);
+                if (result)
+                {
+                    i = -1;
+                }
+            }
+
             SetGrid();
 
             return;

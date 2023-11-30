@@ -5,6 +5,12 @@ namespace DokuApp.Model.Builder
 {
     internal class Extractor
     {
+        /// <summary>
+        /// Used to retrieve a row from a NumericalMatrix.
+        /// </summary>
+        /// <param name="matrix">Matrix to pull from.</param>
+        /// <param name="row">Row to retrieve.</param>
+        /// <returns>Returns an array. To access: results[col].</returns>
         public static int[] NumericRow(NumericalMatrix matrix, int row)
         {
             int[] results = new int[9];
@@ -22,6 +28,12 @@ namespace DokuApp.Model.Builder
             return results;
         }
 
+        /// <summary>
+        /// Used to retrieve a column from a NumericalMatrix.
+        /// </summary>
+        /// <param name="matrix">Matrix to pull from.</param>
+        /// <param name="col">Column to retrieve.</param>
+        /// <returns>Returns column data. To access: results[row]</returns>
         public static int[] NumericColumn(NumericalMatrix matrix, int col)
         {
             int[] results = new int[9];
@@ -39,6 +51,12 @@ namespace DokuApp.Model.Builder
             return results;
         }
 
+        /// <summary>
+        /// Used to retrieve a box from NumericalData
+        /// </summary>
+        /// <param name="matrix">Matrix to pull from.</param>
+        /// <param name="box">Box to retrieve.</param>
+        /// <returns>Returns box data. To access: results[cell]</returns>
         public static int[] NumericBox(NumericalMatrix matrix, int box)
         {
             int[] results = new int[9];
@@ -50,9 +68,80 @@ namespace DokuApp.Model.Builder
 
             for (int cell = 0; cell < 9; cell++)
             {
-                Tuple<int, int> pos = CellPosition.BoxCell(box, cell);
+                (int col, int row) = CellPosition.BoxCell(box, cell);
 
-                results[cell] = matrix.Matrix[pos.Item1, pos.Item2];
+                results[cell] = matrix.Matrix[col, row];
+            }
+
+            return results;
+        }
+
+        /// <summary>
+        /// Used to retreive a logical row.
+        /// </summary>
+        /// <param name="matrix">Matrix to pull from.</param>
+        /// <param name="row">Row to retreive.</param>
+        /// <returns>To access: results[col] => matrix[col, row]</returns>
+        public static bool[] LogicalRow(LogicMatrix matrix, int row)
+        {
+            bool[] results = new bool[9];
+
+            if (Math.Clamp(row, 0, 8) != row)
+            {
+                return results;
+            }
+
+            for (int col = 0; col < 9; col++)
+            {
+                results[col] = matrix.Truths[col, row];
+            }
+
+            return results;
+        }
+
+        /// <summary>
+        /// Used to retrieve a logical column.
+        /// </summary>
+        /// <param name="matrix">Matrix to pull from.</param>
+        /// <param name="col">Column to retrieve.</param>
+        /// <returns>To access: results[row] => matrix[col, row]</returns>
+        public static bool[] LogicalColumn(LogicMatrix matrix, int col)
+        {
+            bool[] results = new bool[9];
+
+            if (Math.Clamp(col, 0, 8) != col)
+            {
+                return results;
+            }
+
+            for (int row = 0; row < 9; row++)
+            {
+                results[row] = matrix.Truths[col, row];
+            }
+
+            return results;
+        }
+
+        /// <summary>
+        /// Used to retrieve a logical box.
+        /// </summary>
+        /// <param name="matrix">Matrix to pull from.</param>
+        /// <param name="box">Box to retrieve.</param>
+        /// <returns>results[cell] => [box, cell]. Use CellPosition.BoxCell to convert to [col, row]</returns>
+        public static bool[] LogicalBox(LogicMatrix matrix, int box)
+        {
+            bool[] results = new bool[9];
+
+            if (Math.Clamp(box, 0, 8) != box)
+            {
+                return results;
+            }
+
+            for (int cell = 0; cell < 9; cell++)
+            {
+                (int col, int row) = CellPosition.BoxCell(box, cell);
+
+                results[cell] = matrix.Truths[col, row];
             }
 
             return results;

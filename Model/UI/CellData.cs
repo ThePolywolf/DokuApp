@@ -2,13 +2,13 @@
 {
     public class CellData
     {
-        private int _value;
+        private readonly int _value;
         public int Value { get { return _value; } }
 
-        private int[] _corners;
+        private readonly int[] _corners;
         public int[] Corners { get { return _corners; } }
 
-        private bool _permenant;
+        private readonly bool _permenant;
         public bool Permenant { get { return _permenant; } }
 
         public CellData (int value, int[] corners, bool permenant)

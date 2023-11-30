@@ -102,8 +102,8 @@ namespace DokuApp.Model.Builder
 
         public static int ExtractPosition(Position position, Tuple<int, int> cell)
         {
-            int row = cell.Item1;
-            int col = cell.Item2;
+            int col = cell.Item1;
+            int row = cell.Item2;
 
             if (position == Position.Row)
             {
@@ -116,7 +116,7 @@ namespace DokuApp.Model.Builder
             }
 
             // otherwise Position.Box
-            int box = ((row - (row % 3)) / 3) + (col - (col % 3));
+            (int box, int nCell) = CellPosition.InverseBoxCell(col, row);
             return box;
         }
 

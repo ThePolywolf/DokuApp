@@ -19,7 +19,7 @@ namespace DokuApp.View
                 "IsActive",
                 typeof(bool),
                 typeof(EntrySlider),
-                new PropertyMetadata(false, onActivationChanged));
+                new PropertyMetadata(false, OnActivationChanged));
 
         public bool IsActive
         {
@@ -27,7 +27,7 @@ namespace DokuApp.View
             set { SetValue(IsActiveProperty, value); }
         }
 
-        private static void onActivationChanged( DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void OnActivationChanged( DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             EntrySlider slider = (EntrySlider)d;
             bool isActive = (bool)e.NewValue;
@@ -35,12 +35,12 @@ namespace DokuApp.View
             if (isActive)
             {
                 slider.Box.Fill = Brushes.Green;
-                slider.Box.HorizontalAlignment = HorizontalAlignment.Right;
+                slider.Box.VerticalAlignment = VerticalAlignment.Top;
             }
             else
             {
                 slider.Box.Fill = Brushes.Red;
-                slider.Box.HorizontalAlignment = HorizontalAlignment.Left;
+                slider.Box.VerticalAlignment = VerticalAlignment.Bottom;
             }
         }
 

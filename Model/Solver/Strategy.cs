@@ -1,10 +1,18 @@
 ﻿using DokuApp.Model.Data;
-using DokuApp.Model.Builder;
 
 namespace DokuApp.Model.Solver
 {
-    abstract class Strategy
+    public abstract class Strategy
     {
-        abstract public bool Solve(SudokuMatrix gameboard);
+        public string Name { get { return $"{GetName()} Strategy"; } }
+
+        /// <summary>
+        /// Applies a strategy to the gameboard to narrow down possibilities.
+        /// </summary>
+        /// <param name="gameboard">Gameboard to reference and edit.</param>
+        /// <returns>True: A change was made, False: No changes were made</returns>
+        public abstract bool Solve(SudokuMatrix gameboard);
+
+        protected abstract string GetName();
     }
 }

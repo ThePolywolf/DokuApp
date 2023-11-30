@@ -17,7 +17,16 @@
             </Grid.ColumnDefinitions>
 
             <View:CompleteGrid x:Name="FullGrid" Grid.Column="0"/>
-            <View:EntryDock x:Name="Entries" Grid.Column="1" Width="310"/>
+
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                
+                <View:EntryDock x:Name="Entries" Grid.Row="0" Width="310"/>
+                <View:SolverDock x:Name="Solvers" Grid.Row="1"/>
+            </Grid>
         </Grid>
     </Grid>
 </Window>

@@ -2,9 +2,9 @@
 
 namespace DokuApp.Model.Data
 {
-    class NumericalMatrix
+    public class NumericalMatrix
     {
-        private int[,] _matrix;
+        private readonly int[,] _matrix;
         public int[,] Matrix { get { return _matrix; } }
 
         public NumericalMatrix()
@@ -34,8 +34,7 @@ namespace DokuApp.Model.Data
 
         public bool SetCell(Tuple<int, int> cell, int value)
         {
-            int col = cell.Item1;
-            int row = cell.Item2;
+            (int col, int row) = cell;
 
             if (Math.Clamp(row, 0, 9) != row || Math.Clamp(col, 0, 8) != col || Math.Clamp(value, 1, 9) != value)
             {

@@ -5,7 +5,7 @@ namespace DokuApp.View
 {
     public partial class EntryDock : UserControl
     {
-        private EntryButton[] _buttons;
+        private readonly EntryButton[] _buttons;
 
         public event EventHandler<int>? NumberRecieved;
         public event EventHandler<bool>? NewEntryMode;

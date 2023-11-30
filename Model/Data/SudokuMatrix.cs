@@ -1,18 +1,19 @@
-﻿using DokuApp.Model.UI;
-using DokuApp.Model.Builder;
+﻿using DokuApp.Model.Builder;
+using DokuApp.Model.UI;
 using System;
 using System.Collections.Generic;
 
 namespace DokuApp.Model.Data
 {
-    class SudokuMatrix
+    public class SudokuMatrix
     {
         private NumericalMatrix _values;
-        private LogicMatrix[] _options;
+        private readonly LogicMatrix[] _options;
 
         public NumericalMatrix Values {  get { return _values; } }
         public LogicMatrix[] Options { get { return _options; } }
 
+        // constructors
         public SudokuMatrix()
         {
             _values = new NumericalMatrix();
@@ -24,6 +25,17 @@ namespace DokuApp.Model.Data
             }
         }
 
+        public SudokuMatrix(NumericalMatrix values)
+        {
+            _values = values;
+            _options = new LogicMatrix[9];
+
+            for (int i = 0; i < 9; i++)
+            {
+                _options[i] = new LogicMatrix();
+            }
+        }
+        
         public void AddCorner(Tuple<int, int> position, int corner)
         {
             _options[corner - 1].Flip(LogicBuilder.Cell(position));
@@ -63,6 +75,27 @@ namespace DokuApp.Model.Data
             }
 
             return data;
+        }
+
+        // Setters
+        public void SetOption(LogicMatrix newOption, int target)
+        {
+            if (target < 0 || target >= 9 || newOption == null)
+            {
+                return;
+            }
+
+            _options[target] = newOption;
+        }
+
+        public void SetValues(NumericalMatrix newValues)
+        {
+            if (newValues == null)
+            {
+                return;
+            }
+
+            _values = newValues;
         }
     }
 }
