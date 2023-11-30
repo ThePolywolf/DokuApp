@@ -1,28 +1,39 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace DokuApp.View
 {
-    /// <summary>
-    /// Interaction logic for CompleteGrid.xaml
-    /// </summary>
     public partial class CompleteGrid : UserControl
     {
+        public event EventHandler<Tuple<int, int>>? MouseSelection;
+
         public CompleteGrid()
         {
             InitializeComponent();
+        }
+
+        private void GridClicked(object sender, MouseButtonEventArgs e)
+        {
+            Point mousePosition = e.GetPosition(this);
+
+            double percentageX = (mousePosition.X / ActualWidth);
+            double percentageY = (mousePosition.Y / ActualHeight);
+
+            Debug.WriteLine($"X: {percentageX} Y: {percentageY}");
+
+            int row = (int)Math.Floor(percentageY * 9);
+            int column = (int)Math.Floor(percentageX * 9);
+
+            if (row < 0 || row > 8 || column < 0 || column > 8)
+            {
+                return;
+            }
+
+            Tuple<int, int> selection = Tuple.Create(column, row);
+            MouseSelection?.Invoke(this, selection);
         }
     }
 }

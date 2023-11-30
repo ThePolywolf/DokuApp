@@ -8,10 +8,14 @@
         private int[] _corners;
         public int[] Corners { get { return _corners; } }
 
-        public CellData (int value, int[] corners)
+        private bool _permenant;
+        public bool Permenant { get { return _permenant; } }
+
+        public CellData (int value, int[] corners, bool permenant)
         {
             _value = value;
             _corners = corners;
+            _permenant = permenant;
         }
     }
 }

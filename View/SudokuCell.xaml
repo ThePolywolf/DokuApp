@@ -6,31 +6,33 @@
              xmlns:local="clr-namespace:DokuApp.View"
              mc:Ignorable="d" 
              d:DesignHeight="60" d:DesignWidth="60">
-    <Grid>
-        <TextBlock Name="CellValue" Text="9" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="40"/>
+    <Viewbox>
+        <Grid Name="Box" Width="60" Height="60">
+            <TextBlock Name="CellValue" Text="9" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="50"/>
 
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
 
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
 
-            <TextBlock Name="b1" Text="1" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="11"/>
-            <TextBlock Name="b2" Text="2" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="11"/>
-            <TextBlock Name="b3" Text="3" Grid.Row="0" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="11"/>
-            <TextBlock Name="b4" Text="4" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="11"/>
-            <TextBlock Name="b5" Text="5" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="11"/>
-            <TextBlock Name="b6" Text="6" Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="11"/>
-            <TextBlock Name="b7" Text="7" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="11"/>
-            <TextBlock Name="b8" Text="8" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="11"/>
-            <TextBlock Name="b9" Text="9" Grid.Row="2" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="11"/>
+                <TextBlock Name="b1" Text="1" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="15"/>
+                <TextBlock Name="b2" Text="2" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="15"/>
+                <TextBlock Name="b3" Text="3" Grid.Row="0" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="15"/>
+                <TextBlock Name="b4" Text="4" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="15"/>
+                <TextBlock Name="b5" Text="5" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="15"/>
+                <TextBlock Name="b6" Text="6" Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="15"/>
+                <TextBlock Name="b7" Text="7" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="15"/>
+                <TextBlock Name="b8" Text="8" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="15"/>
+                <TextBlock Name="b9" Text="9" Grid.Row="2" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="15"/>
+            </Grid>
         </Grid>
-    </Grid>
+    </Viewbox>
 </UserControl>

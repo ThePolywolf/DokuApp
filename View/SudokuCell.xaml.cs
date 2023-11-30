@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Windows.Controls;
+using System.Windows.Media;
 using DokuApp.Model.UI;
 
 namespace DokuApp.View
@@ -13,6 +14,15 @@ namespace DokuApp.View
 
         public void SetCell(CellData data)
         {
+            if (data.Permenant)
+            {
+                CellValue.Foreground = Brushes.Black;
+            }
+            else
+            {
+                CellValue.Foreground = Brushes.DarkBlue;
+            }
+
             TextBlock[] Corners = new TextBlock[] {b1, b2, b3, b4, b5, b6, b7, b8, b9};
 
             foreach (TextBlock corner in Corners)

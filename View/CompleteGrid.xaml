@@ -5,29 +5,31 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:DokuApp.View"
              mc:Ignorable="d" 
-             d:DesignHeight="600" d:DesignWidth="600">
-    <Grid>
-        <Rectangle Fill="White"/>
+             d:DesignHeight="800" d:DesignWidth="600">
+    <Grid MouseDown="GridClicked">
+        <Grid Name="Box" Height="{Binding Path=ActualWidth, ElementName=Box, Mode=OneWay}" HorizontalAlignment="Stretch" VerticalAlignment="Center">
+            <Rectangle Fill="White"/>
 
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="5"/>
-                <ColumnDefinition/>
-                <ColumnDefinition Width="5"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="5"/>
-                <RowDefinition/>
-                <RowDefinition Height="5"/>
-            </Grid.RowDefinitions>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="5"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="5"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="5"/>
+                    <RowDefinition/>
+                    <RowDefinition Height="5"/>
+                </Grid.RowDefinitions>
 
-            <Grid Grid.Row="1" Grid.Column="1">
-                <local:SelectionGrid x:Name="Selection"/>
-                <local:SudokuGrid x:Name="Values"/>
-                <local:ErrorGrid x:Name="Errors"/>
+                <Grid Grid.Row="1" Grid.Column="1">
+                    <local:SelectionGrid x:Name="Selection"/>
+                    <local:SudokuGrid x:Name="Values"/>
+                    <local:ErrorGrid x:Name="Errors"/>
+                </Grid>
             </Grid>
+
+                <local:Boarder/>
         </Grid>
-        
-        <local:Boarder/>
     </Grid>
 </UserControl>

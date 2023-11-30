@@ -1,34 +1,39 @@
 ﻿using DokuApp.Model.Data;
 using DokuApp.Model.Solver;
+using DokuApp.Model.Builder;
 using System;
-using System.Diagnostics;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
 
 namespace DokuApp
 {
     public partial class MainWindow : Window
     {
         private SudokuMatrix _sudokuMatrix;
+        private LogicMatrix _numberPermenance;
         private UserSelection _selection;
         private NumericErrors _numericErrors;
 
+        private bool _permenantEntry;
 
         public MainWindow()
         {
             InitializeComponent();
 
+            FullGrid.MouseSelection += GridClicked;
+
             _sudokuMatrix = new SudokuMatrix();
+            _numberPermenance = new LogicMatrix();
             _numericErrors = new NumericErrors();
             SetGrid();
 
             _selection = new UserSelection();
             SetSelection();
+
+            Entries.NumberRecieved += ManualNumberInput;
             
-            // TODO: Add Mouse clicking to change selection
-            // TODO: Add support to set cell values from key-presses and del/backspace
+            _permenantEntry = true;
+            Entries.NewEntryMode += ChangeEntryMode;
         }
 
         public void SetGrid()
@@ -46,6 +51,9 @@ namespace DokuApp
 
         private void MainWindow_OnKeyDown(object sender, KeyEventArgs e)
         {
+            // cascade SHIFT changes
+            Entries.Shift(Keyboard.Modifiers.HasFlag(ModifierKeys.Shift));
+
             if (e.Key == Key.Down)
             {
                 _selection.Down();
@@ -77,25 +85,7 @@ namespace DokuApp
             if (e.Key >= Key.D1 && e.Key <= Key.D9)
             {
                 int numberPressed = e.Key - Key.D0;
-                Tuple<int, int> position = _selection.SingleSelection;
-                
-                // targets corner possibilities if shifted
-                if (Keyboard.Modifiers.HasFlag(ModifierKeys.Shift))
-                {
-                    // only set corner values if cell is empty
-                    if (_sudokuMatrix.Values.Matrix[position.Item1, position.Item2] != 0)
-                    {
-                        return;
-                    }
-
-                    _sudokuMatrix.AddCorner(position, numberPressed);
-                    SetGrid();
-
-                    return;
-                }
-                
-                _sudokuMatrix.Values.SetCell(position, numberPressed);
-                SetGrid();
+                SetCellValue(numberPressed);
 
                 return;
             }
@@ -104,30 +94,82 @@ namespace DokuApp
             {
                 Tuple<int, int> position = _selection.SingleSelection;
 
+                // if not in permenance mode, can't delete a permenant cell
+                if (!_permenantEntry)
+                {
+                    if (_numberPermenance.Truths[position.Item1, position.Item2])
+                    {
+                        return;
+                    }
+                }
+
                 _sudokuMatrix.Values.DeleteCell(position);
                 SetGrid();
+
+                return;
             }
         }
 
-        private void GridClicked(object sender, MouseButtonEventArgs e)
+        private void SetCellValue(int number)
         {
-            Point mousePosition = e.GetPosition(FullGrid);
-
-            double percentageX = (mousePosition.X / FullGrid.Width);
-            double percentageY = (mousePosition.Y / FullGrid.Height);
-
-            Debug.WriteLine($"X: {percentageX} Y: {percentageY}");
-
-            int row = (int)Math.Floor(percentageY * 9);
-            int column = (int)Math.Floor(percentageX * 9);
-
-            if (Math.Clamp(row, 0, 8) != row || Math.Clamp(column, 0, 8) != column)
+            if (Math.Clamp(number, 1, 9) != number)
             {
                 return;
             }
 
-            _selection.SingleSelect(Tuple.Create(column, row));
+            Tuple<int, int> position = _selection.SingleSelection;
+
+            // can only change non-permenant cells if not in permenance mode
+            if (!_permenantEntry)
+            {
+                if (_numberPermenance.Truths[position.Item1, position.Item2])
+                {
+                    return;
+                }
+            }
+
+            // targets corner possibilities if shifted
+            if (Keyboard.Modifiers.HasFlag(ModifierKeys.Shift))
+            {
+                // only set corner values if cell is empty
+                if (_sudokuMatrix.Values.Matrix[position.Item1, position.Item2] != 0)
+                {
+                    return;
+                }
+
+                _sudokuMatrix.AddCorner(position, number);
+                SetGrid();
+
+                return;
+            }
+
+            _sudokuMatrix.Values.SetCell(position, number);
+            if (_permenantEntry) _numberPermenance.Add(LogicBuilder.Cell(position));
+            SetGrid();
+
+            return;
+        }
+
+        private void GridClicked(object? sender, Tuple<int, int> selectedCell)
+        {
+            _selection.SingleSelect(selectedCell);
             SetSelection();
+        }
+
+        private void ManualNumberInput(object? sender, int number)
+        {
+            SetCellValue(number);
+        }
+
+        private void ChangeEntryMode(object? sender, bool newMode)
+        {
+            _permenantEntry = newMode;
+        }
+
+        private void MainWindow_OnKeyUp(object sender, KeyEventArgs e)
+        {
+            // cascade SHIFT changes
+            Entries.Shift(Keyboard.Modifiers.HasFlag(ModifierKeys.Shift));
         }
     }
 }

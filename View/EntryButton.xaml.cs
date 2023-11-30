@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
@@ -6,6 +7,8 @@ namespace DokuApp.View
 {
     public partial class EntryButton : UserControl
     {
+        public event EventHandler<int>? NumberButtonPressed;
+
         public EntryButton()
         {
             InitializeComponent();
@@ -15,12 +18,12 @@ namespace DokuApp.View
         {
             if (isActive)
             {
-                FillBox.Fill = Brushes.White;
+                NumberBox.Background = Brushes.White;
             }
 
             else
             {
-                FillBox.Fill = Brushes.DarkGray;
+                NumberBox.Background = Brushes.DarkGray;
             }
         }
 
@@ -41,6 +44,28 @@ namespace DokuApp.View
         {
             EntryButton numberBox = (EntryButton)d;
             numberBox.textBox.Text = (string)e.NewValue;
+        }
+
+        private void ButtonPressed(object sender, RoutedEventArgs e)
+        {
+            if (!int.TryParse(NumberText, out int number))
+            {
+                number = 0;
+            }
+
+            NumberButtonPressed?.Invoke(this, number);
+        }
+
+        public void Shift(bool doShift)
+        {
+            if (doShift)
+            {
+                textBox.FontSize = 25;
+            }
+            else
+            {
+                textBox.FontSize = 60;
+            }
         }
     }
 }

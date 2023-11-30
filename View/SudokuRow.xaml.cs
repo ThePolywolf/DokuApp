@@ -19,7 +19,7 @@ namespace DokuApp.View
                 // fill in missing data with blank data
                 if (cellData.Length <= i)
                 {
-                    cell[i].SetCell(new CellData(0, new int[] {}));
+                    cell[i].SetCell(new CellData(0, new int[] {}, false));
                     continue;
                 }
 

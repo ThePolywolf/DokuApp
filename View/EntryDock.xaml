@@ -7,6 +7,8 @@
              mc:Ignorable="d" 
              d:DesignHeight="400" d:DesignWidth="300">
     <Grid Margin="30">
+        <local:EntrySlider x:Name="Slider" IsActive="True" VerticalAlignment="Top" Margin="10" Height="70"/>
+
         <Grid Name="Box" Height="{Binding Path=ActualWidth, ElementName=Box, Mode=OneWay}" VerticalAlignment="Bottom">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>

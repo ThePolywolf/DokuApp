@@ -7,7 +7,8 @@
         xmlns:View="clr-namespace:DokuApp.View"
         mc:Ignorable="d"
         Title="MainWindow" Height="600" Width="1000"
-        PreviewKeyDown="MainWindow_OnKeyDown">
+        PreviewKeyDown="MainWindow_OnKeyDown"
+        PreviewKeyUp="MainWindow_OnKeyUp">
     <Grid Margin="60">
         <Grid>
             <Grid.ColumnDefinitions>
@@ -15,8 +16,8 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
 
-            <View:CompleteGrid x:Name="FullGrid" Grid.Column="0" Width="400" Height="400" MouseDown="GridClicked"/>
-            <View:EntryDock x:Name="Entries" Grid.Column="1" Width="340"/>
+            <View:CompleteGrid x:Name="FullGrid" Grid.Column="0"/>
+            <View:EntryDock x:Name="Entries" Grid.Column="1" Width="310"/>
         </Grid>
     </Grid>
 </Window>
