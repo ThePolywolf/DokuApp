@@ -24,6 +24,7 @@
             <Grid Grid.Row="1" Grid.Column="1">
                 <local:SelectionGrid x:Name="Selection"/>
                 <local:SudokuGrid x:Name="Values"/>
+                <local:ErrorGrid x:Name="Errors"/>
             </Grid>
         </Grid>
         

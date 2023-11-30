@@ -1,6 +1,6 @@
 ﻿namespace DokuApp.Model.Data
 {
-    class LogicMatrix
+    public class LogicMatrix
     {
         private bool[,] _truths;
 
@@ -104,6 +104,22 @@
             }
 
             return new LogicMatrix(truths);
+        }
+
+        public bool IsTrue()
+        {
+            for (int i = 0; i < 9; i++)
+            {
+                for (int j = 0; j < 9; j++)
+                {
+                    if (_truths[i, j])
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
     }
 }

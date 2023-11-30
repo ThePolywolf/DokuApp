@@ -11,35 +11,15 @@ namespace DokuApp.Model.Builder
             Column,
             Box
         }
-
-        public static LogicMatrix? Matrix(Position position, int target)
-        {
-            if (position == Position.Row)
-            {
-                return Row(target);
-            }
-            
-            if (position == Position.Column)
-            {
-                return Column(target);
-            }
-
-            if (position == Position.Box)
-            {
-                return Box(target);
-            }
-
-            return null;
-        }
-
         public static LogicMatrix All(bool value)
         {
             bool[,] truths = new bool[9, 9];
 
             for (int cell = 0; cell < 81; cell++)
             {
-                int column = cell % 9;
-                truths[(cell - column) / 9, column] = value;
+                int col = cell % 9;
+                int row = (cell - col) / 9;
+                truths[col, row] = value;
             }
 
             return new LogicMatrix(truths);
@@ -51,23 +31,23 @@ namespace DokuApp.Model.Builder
 
             row = Math.Clamp(row, 0, 8);
 
-            for (int column = 0; column < 9; column++)
+            for (int col = 0; col < 9; col++)
             {
-                truths[row, column] = true;
+                truths[col, row] = true;
             }
 
             return new LogicMatrix(truths);
         }
 
-        public static LogicMatrix Column(int column)
+        public static LogicMatrix Column(int col)
         {
             bool[,] truths = new bool[9, 9];
 
-            column = Math.Clamp(column, 0, 8);
+            col = Math.Clamp(col, 0, 8);
 
             for (int row = 0; row < 9; row++)
             {
-                truths[row, column] = true;
+                truths[col, row] = true;
             }
 
             return new LogicMatrix(truths);
@@ -81,10 +61,9 @@ namespace DokuApp.Model.Builder
 
             for (int cell = 0; cell < 9; cell++)
             {
-                int row = (box - (box % 3)) + ((cell - (cell % 3)) / 3);
-                int column = 3 * (box % 3) + (cell % 3);
+                (int col, int row) = CellPosition.BoxCell(box, cell);
 
-                truths[row, column] = true;
+                truths[col, row] = true;
             }
 
             return new LogicMatrix(truths);
@@ -100,6 +79,23 @@ namespace DokuApp.Model.Builder
             }
 
             truths[cell.Item1, cell.Item2] = true;
+
+            return new LogicMatrix(truths);
+        }
+
+        public static LogicMatrix Cells(Tuple<int, int>[] cells)
+        {
+            bool[,] truths = new bool[9, 9];
+
+            foreach (Tuple<int, int> cell in cells)
+            {
+                if (cell.Item1 < 0 || cell.Item1 >= 9 || cell.Item2 < 0 || cell.Item2 >= 9)
+                {
+                    continue;
+                }
+
+                truths[cell.Item1, cell.Item2] = true;
+            }
 
             return new LogicMatrix(truths);
         }

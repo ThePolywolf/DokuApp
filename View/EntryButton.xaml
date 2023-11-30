@@ -1,0 +1,16 @@
+﻿<UserControl x:Class="DokuApp.View.EntryButton"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DokuApp.View"
+             mc:Ignorable="d" 
+             d:DesignHeight="80" d:DesignWidth="80">
+    <Grid Margin="5">
+        <Rectangle Fill="Black"/>
+        <Grid Margin="5">
+            <Rectangle Name="FillBox" Fill="White"/>
+            <TextBlock x:Name="textBox" FontSize="60" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        </Grid>
+    </Grid>
+</UserControl>

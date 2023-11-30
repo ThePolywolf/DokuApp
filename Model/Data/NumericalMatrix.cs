@@ -59,5 +59,23 @@ namespace DokuApp.Model.Data
             _matrix[col, row] = 0;
             return true;
         }
+
+        public LogicMatrix AsLogic()
+        {
+            bool[,] truths = new bool[9, 9];
+
+            for (int row = 0; row < 9; row++)
+            {
+                for (int col = 0; col < 9; col++)
+                {
+                    if (_matrix[col, row] != 0)
+                    {
+                        truths[col, row] = true;
+                    }
+                }
+            }
+
+            return new LogicMatrix(truths);
+        }
     }
 }

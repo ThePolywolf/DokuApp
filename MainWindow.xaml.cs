@@ -1,8 +1,11 @@
 ﻿using DokuApp.Model.Data;
-using DokuApp.Model.UI;
+using DokuApp.Model.Solver;
 using System;
+using System.Diagnostics;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace DokuApp
 {
@@ -10,6 +13,7 @@ namespace DokuApp
     {
         private SudokuMatrix _sudokuMatrix;
         private UserSelection _selection;
+        private NumericErrors _numericErrors;
 
 
         public MainWindow()
@@ -17,6 +21,7 @@ namespace DokuApp
             InitializeComponent();
 
             _sudokuMatrix = new SudokuMatrix();
+            _numericErrors = new NumericErrors();
             SetGrid();
 
             _selection = new UserSelection();
@@ -29,6 +34,9 @@ namespace DokuApp
         public void SetGrid()
         {
             FullGrid.Values.SetGrid(_sudokuMatrix.CellData());
+
+            LogicMatrix errors = _numericErrors.FindErrors(_sudokuMatrix.Values);
+            FullGrid.Errors.SetErrorCells(errors);
         }
 
         public void SetSelection()
@@ -99,6 +107,27 @@ namespace DokuApp
                 _sudokuMatrix.Values.DeleteCell(position);
                 SetGrid();
             }
+        }
+
+        private void GridClicked(object sender, MouseButtonEventArgs e)
+        {
+            Point mousePosition = e.GetPosition(FullGrid);
+
+            double percentageX = (mousePosition.X / FullGrid.Width);
+            double percentageY = (mousePosition.Y / FullGrid.Height);
+
+            Debug.WriteLine($"X: {percentageX} Y: {percentageY}");
+
+            int row = (int)Math.Floor(percentageY * 9);
+            int column = (int)Math.Floor(percentageX * 9);
+
+            if (Math.Clamp(row, 0, 8) != row || Math.Clamp(column, 0, 8) != column)
+            {
+                return;
+            }
+
+            _selection.SingleSelect(Tuple.Create(column, row));
+            SetSelection();
         }
     }
 }
