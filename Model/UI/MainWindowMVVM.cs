@@ -3,6 +3,7 @@ using DokuApp.Model.Solver;
 using System.Windows.Input;
 using System.Windows;
 using System;
+using System.Diagnostics;
 
 namespace DokuApp.Model.UI
 {
@@ -48,13 +49,16 @@ namespace DokuApp.Model.UI
 
             // set up strategies
             _strategies = new Strategy[] {
-                new SudokuStrategy(),
                 new NakedSinglesStrategy(),
+                new SudokuStrategy(),
                 new SinglesStrategy(),
                 new PointingDoubleTripleStrategy(),
-                new HiddenPairStrategy(),
-                new HiddenTripleStrategy(),
-                new HiddenQuadStrategy(),
+                //new NakedPairStrategy(),
+                //new HiddenPairStrategy(),
+                //new NakedTripleStrategy(),
+                //new HiddenTripleStrategy(),
+                //new NakedQuadStrategy(),
+                //new HiddenQuadStrategy(),
             };
         }
 
@@ -194,18 +198,29 @@ namespace DokuApp.Model.UI
 
             // Loops through each strategy, and on a succesful attempt restarts from the beginning.
             int i = 0;
+            int count = 0;
             while (i < _strategies.Length)
             {
+                count++;
+
+                if (count > 1000)
+                {
+                    break;
+                }
+
                 bool result = _strategies[i].Solve(_sudokuMatrix);
                 if (result)
                 {
-                    SetGrid();
+                    Debug.WriteLine($"Solve - {_strategies[i].Name} @count-{count}");
+
                     i = 0;
                     continue;
                 }
 
                 i++;
             }
+
+            SetGrid();
         }
 
         private void ClearNumberGrid(object? sender, RoutedEventArgs e)

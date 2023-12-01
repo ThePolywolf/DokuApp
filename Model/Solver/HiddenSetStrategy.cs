@@ -2,6 +2,7 @@
 using DokuApp.Model.Data;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace DokuApp.Model.Solver
@@ -21,9 +22,10 @@ namespace DokuApp.Model.Solver
             {
                 LogicMatrix overlappedLogic = Extractor.OverlapOptions(gameboard, pairingOptions);
 
+                // loop through [row, column, box] 1-9 (0-8)
                 for (int target = 0; target < 9; target++)
                 {
-                    // rows
+                    // row <-- target
                     bool[] row = Extractor.LogicalRow(overlappedLogic, target);
                     if (SetHasMulti(row, out int[] rowCells))
                     {
@@ -34,11 +36,15 @@ namespace DokuApp.Model.Solver
                             targetCells[i] = Tuple.Create(rowCells[i], target);
                         }
 
-                        ClearCellsForMulti(pairingOptions, targetCells, gameboard);
-                        return true;
+                        bool changed = ClearCellsForMulti(pairingOptions, targetCells, gameboard);
+                        
+                        if (changed)
+                        {
+                            return true;
+                        }
                     }
 
-                    // columns
+                    // column <-- target
                     bool[] col = Extractor.LogicalColumn(overlappedLogic, target);
                     if (SetHasMulti(col, out int[] colCells))
                     {
@@ -49,11 +55,15 @@ namespace DokuApp.Model.Solver
                             targetCells[i] = Tuple.Create(target, colCells[i]);
                         }
 
-                        ClearCellsForMulti(pairingOptions, targetCells, gameboard);
-                        return true;
+                        bool changed = ClearCellsForMulti(pairingOptions, targetCells, gameboard);
+                        
+                        if (changed)
+                        {
+                            return true;
+                        }
                     }
 
-                    // boxes
+                    // boxes <-- target
                     bool[] box = Extractor.LogicalBox(overlappedLogic, target);
                     if (SetHasMulti(box, out int[] boxCells))
                     {
@@ -64,8 +74,12 @@ namespace DokuApp.Model.Solver
                             targetCells[i] = CellPosition.BoxCell(target, boxCells[i]);
                         }
 
-                        ClearCellsForMulti(pairingOptions, targetCells, gameboard);
-                        return true;
+                        bool changed = ClearCellsForMulti(pairingOptions, targetCells, gameboard);
+                        
+                        if (changed)
+                        {
+                            return true;
+                        }
                     }
                 }
             }
@@ -79,8 +93,11 @@ namespace DokuApp.Model.Solver
         /// <param name="multiSet">Numbers to keep in the cells.</param>
         /// <param name="cells">Cells to target for removal.</param>
         /// <param name="gameboard">Sudoku matrix getting changed.</param>
-        private void ClearCellsForMulti(int[] multiSet, Tuple<int, int>[] cells, SudokuMatrix gameboard)
+        /// <returns>Boolean: true if any changes were made to existing logic.</returns>
+        private static bool ClearCellsForMulti(int[] multiSet, Tuple<int, int>[] cells, SudokuMatrix gameboard)
         {
+            bool changed = false;
+
             for (int number = 0; number < 9; number++)
             {
                 // skip number clearing if part of the multi set
@@ -92,9 +109,11 @@ namespace DokuApp.Model.Solver
                 // disable the possibility in the cell
                 foreach (Tuple<int, int> cell in cells)
                 {
-                    gameboard.Options[number].SetCell(cell, false);
+                    changed |= gameboard.Options[number].SetCell(cell, false);
                 }
             }
+
+            return changed;
         }
     }
 }

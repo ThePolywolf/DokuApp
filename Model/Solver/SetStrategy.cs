@@ -11,8 +11,8 @@ namespace DokuApp.Model.Solver
         /// Returns all unordered uniqued sets of length (multi) from the set 0 to 8.
         /// </summary>
         /// <param name="multi">Unique set length.</param>
-        /// <returns>Hash set of arrays of all unique unordered sets from the set [0, 1, 2, 3, 4, 5, 6, 7, 8].</returns>
-        protected List<int[]> AllMultiSets(int multi)
+        /// <returns>List of arrays of all unique unordered sets from the set [0, 1, 2, 3, 4, 5, 6, 7, 8].</returns>
+        protected static List<int[]> AllMultiSets(int multi)
         {
             List<int[]> sets = new();
 
@@ -30,7 +30,8 @@ namespace DokuApp.Model.Solver
             }
 
             // initialize first Hash
-            sets.Add(probes);
+            sets.Add(ProbeSnapshot(probes));
+            
             // select last probe first
             int probeTarget = multi - 1;
 
@@ -60,7 +61,7 @@ namespace DokuApp.Model.Solver
                 }
 
                 // add probe values
-                sets.Add(probes);
+                sets.Add(ProbeSnapshot(probes));
 
                 // re-target last probe
                 probeTarget = multi - 1;
@@ -95,6 +96,23 @@ namespace DokuApp.Model.Solver
 
             cells = Array.Empty<int>();
             return false;
+        }
+
+        /// <summary>
+        /// Copies probes int[] to a new int[] to avoid reference collisions.
+        /// </summary>
+        /// <param name="probes">int[] to copy.</param>
+        /// <returns>Output int[] identical to probes int[], but with a unique reference.</returns>
+        private static int[] ProbeSnapshot(int[] probes)
+        {
+            int[] result = new int[probes.Length];
+
+            for (int i = 0; i < probes.Length; i++)
+            {
+                result[i] = probes[i];
+            }
+
+            return result;
         }
     }
 }

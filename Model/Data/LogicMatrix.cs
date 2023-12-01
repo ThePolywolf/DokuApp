@@ -142,9 +142,17 @@ namespace DokuApp.Model.Data
         /// </summary>
         /// <param name="position">Cell to change.</param>
         /// <param name="value">New value to set to.</param>
-        public void SetCell(Tuple<int, int> position, bool value)
+        /// <returns>True if new cell value is different from its old value.</returns>
+        public bool SetCell(Tuple<int, int> position, bool value)
         {
-            _truths[position.Item1, position.Item2] = value;
+            (int col, int row) = position;
+            if (_truths[col, row] == value)
+            {
+                return false;
+            }
+
+            _truths[col, row] = value;
+            return true;
         }
 
         /// <summary>

@@ -14,7 +14,7 @@ namespace DokuApp.Model.Solver
         {
             return "Naked Singles";
         }
-
+        
         public override bool Solve(SudokuMatrix gameboard)
         {
             for (int i = 0; i < 81; i++)
@@ -24,10 +24,10 @@ namespace DokuApp.Model.Solver
                 if (CellHasSingle(possibilities, out int nakedNumber))
                 {
                     gameboard.Values.SetCell(CellPosition.Index(i), nakedNumber + 1, false);
-                    return true;
                 }
             }
 
+            // always returns false since it applies all single-candidates at once
             return false;
         }
 

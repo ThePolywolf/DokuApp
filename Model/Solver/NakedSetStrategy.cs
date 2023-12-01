@@ -32,6 +32,8 @@ namespace DokuApp.Model.Solver
                     bool[] row = Extractor.LogicalRow(activeCells, target);
                     if (SetHasMulti(row, out int[] safeCols))
                     {
+                        bool changeMade = false;
+
                         for (int iCol = 0; iCol < 9; iCol++)
                         {
                             // skip safe columns
@@ -41,20 +43,29 @@ namespace DokuApp.Model.Solver
                             }
 
                             // remove each set match number possibility from the other cells
+                            List<Tuple<int, int>> targets = new();
+
                             foreach (int numberTarget in pairingOption)
                             {
                                 Tuple<int, int> position = Tuple.Create(iCol, target);
-                                gameboard.Options[numberTarget].SetCell(position, false);
+                                targets.Add(position);
                             }
+
+                            changeMade |= ChangeCells(targets.ToArray(), target, gameboard);
                         }
 
-                        return true;
+                        if (changeMade)
+                        {
+                            return true;
+                        }
                     }
 
                     // column <= target
                     bool[] col = Extractor.LogicalColumn(activeCells, target);
                     if (SetHasMulti(col, out int[] safeRows))
                     {
+                        bool changeMade = false;
+
                         for (int iRow = 0; iRow < 9; iRow++)
                         {
                             // skip safe rows
@@ -64,20 +75,29 @@ namespace DokuApp.Model.Solver
                             }
 
                             // remove each set match number possibility from the other cells
+                            List<Tuple<int, int>> targets = new();
+
                             foreach (int numberTarget in pairingOption)
                             {
                                 Tuple<int, int> position = Tuple.Create(target, iRow);
-                                gameboard.Options[numberTarget].SetCell(position, false);
+                                targets.Add(position);
                             }
+
+                            changeMade |= ChangeCells(targets.ToArray(), target, gameboard);
                         }
 
-                        return true;
+                        if (changeMade)
+                        {
+                            return true;
+                        }
                     }
 
                     // box <= target
                     bool[] box = Extractor.LogicalBox(activeCells, target);
                     if (SetHasMulti(box, out int[] safeCells))
                     {
+                        bool changeMade = false;
+
                         for (int iCell = 0; iCell < 9; iCell++)
                         {
                             // skip safe cells
@@ -87,19 +107,38 @@ namespace DokuApp.Model.Solver
                             }
 
                             // remove each set match number possibility from the other cells
+                            List<Tuple<int, int>> targets = new();
+
                             foreach (int numberTarget in pairingOption)
                             {
                                 Tuple<int, int> position = CellPosition.BoxCell(target, iCell);
-                                gameboard.Options[numberTarget].SetCell(position, false);
+                                targets.Add(position);
                             }
+
+                            changeMade |= ChangeCells(targets.ToArray(), target, gameboard);
                         }
 
-                        return true;
+                        if (changeMade)
+                        {
+                            return true;
+                        }
                     }
                 }
             }
 
             return false;
+        }
+
+        private static bool ChangeCells(Tuple<int, int>[] cells, int target, SudokuMatrix gameboard)
+        {
+            bool change = false;
+
+            foreach (Tuple<int, int> cell in cells)
+            {
+                change |= gameboard.Options[target].SetCell(cell, false);
+            }
+
+            return change;
         }
     }
 }

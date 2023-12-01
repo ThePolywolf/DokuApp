@@ -181,7 +181,7 @@ namespace DokuApp.Model.Builder
                 return new LogicMatrix();
             }
 
-            LogicMatrix primary = new LogicMatrix();
+            LogicMatrix primary = new();
 
             for (int i = 0; i < selections.Length; i++)
             {
@@ -199,7 +199,7 @@ namespace DokuApp.Model.Builder
         /// <returns>Returns logic matrix of added excepted matricies.</returns>
         public static LogicMatrix ExceptOverlapOptions(SudokuMatrix gameboard, int[] selections)
         {
-            LogicMatrix primary = new LogicMatrix();
+            LogicMatrix primary = new();
 
             for (int i = 0; i < 9; i++)
             {
@@ -209,7 +209,7 @@ namespace DokuApp.Model.Builder
                     continue;
                 }
 
-                primary.Add(gameboard.Options[selections[i]]);
+                primary.Add(gameboard.Options[i]);
             }
 
             return primary;
