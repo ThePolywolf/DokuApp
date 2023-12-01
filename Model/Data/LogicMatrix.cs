@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DokuApp.Model.Builder;
+using System;
 
 namespace DokuApp.Model.Data
 {
@@ -18,8 +19,13 @@ namespace DokuApp.Model.Data
             _truths = new bool[9, 9];
 
             SetLogic(truths);
+
         }
 
+        /// <summary>
+        /// Set the logic to a new value.
+        /// </summary>
+        /// <param name="truths">New logic. Automatically fills in gaps if not a 9x9 matrix.</param>
         public void SetLogic(bool[,] truths)
         {
             for (int i = 0; i < 9; i++)
@@ -38,9 +44,15 @@ namespace DokuApp.Model.Data
             }
         }
 
-        public bool Add(LogicMatrix matrix)
+        /// <summary>
+        /// Adds another matrix to it. value = Current || New. Combination of all truths.
+        /// </summary>
+        /// <param name="matrix">Matrix to add.</param>
+        /// <param name="changed">Out: if there was any change as a result of the addition.</param>
+        /// <returns>Returns self to allow method chaining.</returns>
+        public LogicMatrix Add(LogicMatrix matrix, out bool changed)
         {
-            bool changed = false;
+            changed = false;
 
             for (int i = 0; i < 9; i++)
             {
@@ -57,34 +69,47 @@ namespace DokuApp.Model.Data
                 }
             }
 
-            return changed;
+            return this;
         }
 
-        public bool Subtract(LogicMatrix matrix)
+        /// <summary>
+        /// Adds another matrix to it. value = Current || New. Combination of all truths. There is also a variation with an out bool changed.
+        /// </summary>
+        /// <param name="matrix">Matrix to add.</param>
+        /// <returns>Returns self to allow method chaining.</returns>
+        public LogicMatrix Add(LogicMatrix matrix)
         {
-            bool changed = false;
+            return Add(matrix, out bool _1);
+        }
 
+        /// <summary>
+        /// Subtracts by given matrix. If matrix[cell] = true, self[cell] = false.
+        /// </summary>
+        /// <param name="matrix">Matrix to subtract by.</param>
+        /// <returns>Returns self for method chaining.</returns>
+        public LogicMatrix Subtract(LogicMatrix matrix)
+        {
             for (int i = 0; i < 9; i++)
             {
                 for (int j = 0; j < 9; j++)
                 {
                     bool newTruth = _truths[i, j] && !matrix.Truths[i, j];
 
-                    if (!changed && _truths[i, j] != newTruth)
-                    {
-                        changed = true;
-                    }
-
                     _truths[i, j] = newTruth;
                 }
             }
 
-            return changed;
+            return this;
         }
 
+        /// <summary>
+        /// Flip all cells corresponding to the matrix. Tries to add matrix, and if there is no change, subtracts the matrix.
+        /// </summary>
+        /// <param name="matrix">Matrix to flip by (add or subtract)</param>
         public void Flip(LogicMatrix matrix)
         {
-            if (Add(matrix))
+            Add(matrix, out bool changed);
+            if (changed)
             {
                 return;
             }
@@ -93,42 +118,40 @@ namespace DokuApp.Model.Data
             return;
         }
 
-        public LogicMatrix Inverted()
-        {
-            bool[,] truths = new bool[9, 9];
-
-            for (int i = 0;i < 9; i++)
-            {
-                for (int j = 0; j < 9; j++)
-                {
-                    truths[i, j] = !_truths[i, j];
-                }
-            }
-
-            return new LogicMatrix(truths);
-        }
-
+        /// <summary>
+        /// Figures out if the whole matrix is true.
+        /// </summary>
+        /// <returns>Returns false if any value in the matrix is false.</returns>
         public bool IsTrue()
         {
-            for (int i = 0; i < 9; i++)
+            for (int index = 0; index < 9; index++)
             {
-                for (int j = 0; j < 9; j++)
+                (int col, int row) = CellPosition.Index(index);
+
+                if (!_truths[col, row])
                 {
-                    if (_truths[i, j])
-                    {
-                        return true;
-                    }
+                    return false;
                 }
             }
 
-            return false;
+            return true;
         }
 
+        /// <summary>
+        /// Set the cell to a new value.
+        /// </summary>
+        /// <param name="position">Cell to change.</param>
+        /// <param name="value">New value to set to.</param>
         public void SetCell(Tuple<int, int> position, bool value)
         {
             _truths[position.Item1, position.Item2] = value;
         }
 
+        /// <summary>
+        /// Checks is a cell is true
+        /// </summary>
+        /// <param name="position">Cell to check.</param>
+        /// <returns>Returns the value of the cell.</returns>
         public bool IsCellTrue(Tuple<int, int> position)
         {
             return _truths[position.Item1, position.Item2];

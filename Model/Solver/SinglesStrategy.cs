@@ -23,12 +23,12 @@ namespace DokuApp.Model.Solver
                     // box <= i
                     bool[] boxValues = Extractor.LogicalBox(board, i);
 
-                    if (SetSingle(boxValues, out int lastCell))
+                    if (SetContainsSingle(boxValues, out int lastCell))
                     {
                         Tuple<int, int> position = CellPosition.BoxCell(i, lastCell);
 
                         // set number on NumericalMatrix
-                        gameboard.Values.SetCell(position, target + 1);
+                        gameboard.Values.SetCell(position, target + 1, false);
 
                         // exclude that cell from possiblities
                         board.Subtract(LogicBuilder.CellExclusion(position));
@@ -40,12 +40,12 @@ namespace DokuApp.Model.Solver
                     // row <= i
                     bool[] rowValues = Extractor.LogicalRow(board, i);
 
-                    if (SetSingle(rowValues, out int lastCol))
+                    if (SetContainsSingle(rowValues, out int lastCol))
                     {
                         Tuple<int, int> position = Tuple.Create(lastCol, i);
 
                         // set number on NumericalMatrix
-                        gameboard.Values.SetCell(position, target + 1);
+                        gameboard.Values.SetCell(position, target + 1, false);
 
                         // exclude that cell from possiblities
                         board.Subtract(LogicBuilder.CellExclusion(position));
@@ -57,12 +57,12 @@ namespace DokuApp.Model.Solver
                     // column <= i
                     bool[] possibilities = Extractor.LogicalColumn(board, i);
 
-                    if (SetSingle(possibilities, out int lastRow))
+                    if (SetContainsSingle(possibilities, out int lastRow))
                     {
                         Tuple<int, int> position = Tuple.Create(i, lastRow);
 
                         // set number on NumericalMatrix
-                        gameboard.Values.SetCell(position, target + 1);
+                        gameboard.Values.SetCell(position, target + 1, false);
 
                         // exclude that cell from possiblities
                         board.Subtract(LogicBuilder.CellExclusion(position));
@@ -81,7 +81,7 @@ namespace DokuApp.Model.Solver
             return "Singles";
         }
 
-        private static bool SetSingle(bool[] set, out int lastTruth)
+        private static bool SetContainsSingle(bool[] set, out int lastTruth)
         {
             lastTruth = 0;
             int countedOptions = 0;

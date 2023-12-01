@@ -116,7 +116,7 @@ namespace DokuApp.Model.Builder
             }
 
             // otherwise Position.Box
-            (int box, int nCell) = CellPosition.InverseBoxCell(col, row);
+            int box = CellPosition.InverseBoxCell(col, row).Item1;
             return box;
         }
 

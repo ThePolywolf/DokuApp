@@ -1,9 +1,8 @@
 ﻿<Window x:Class="DokuApp.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:DokuApp"
         xmlns:View="clr-namespace:DokuApp.View"
         mc:Ignorable="d"
         Title="MainWindow" Height="600" Width="1000"
@@ -25,7 +24,28 @@
                 </Grid.RowDefinitions>
                 
                 <View:EntryDock x:Name="Entries" Grid.Row="0" Width="310"/>
-                <View:SolverDock x:Name="Solvers" Grid.Row="1"/>
+
+                <Grid Grid.Row="1" Margin="40, 0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <Button Click="SolveGrid" Content="Solve Sudoku" Grid.Row="0" Grid.Column="0" FontSize="20" Margin="5" BorderThickness="5" BorderBrush="Black"/>
+                    <Button Click="MarkCorners" Content="Mark Corners" Grid.Row="0" Grid.Column="1" FontSize="20" Margin="5" BorderThickness="5" BorderBrush="Black"/>
+
+                    <Button Click="ClearNumbers" Content="Clear Numbers" Grid.Row="2" Grid.Column="0" FontSize="20" Margin="5" BorderThickness="5" BorderBrush="Black"/>
+                    <Button Click="ClearPossibilities" Content="Clear Corners" Grid.Row="2" Grid.Column="1" FontSize="20" Margin="5" BorderThickness="5" BorderBrush="Black"/>
+                    <Button Click="ClearGrid" Content="Clear Grid" Grid.Row="3" Grid.Column="0" FontSize="20" Margin="5" BorderThickness="5" BorderBrush="Black"/>
+                    <Button Click="FullClearGrid" Content="Clear Grid (All)" Grid.Row="3" Grid.Column="1" FontSize="20" Margin="5" BorderThickness="5" BorderBrush="Black"/>
+                </Grid>
+                
             </Grid>
         </Grid>
     </Grid>

@@ -41,7 +41,7 @@ namespace DokuApp.Model.Data
             _options[corner - 1].Flip(LogicBuilder.Cell(position));
         }
 
-        public CellData[][] CellData(LogicMatrix? permenance = null)
+        public CellData[][] CellData()
         {
             CellData[][] data = new CellData[9][];
 
@@ -61,12 +61,7 @@ namespace DokuApp.Model.Data
                         }
                     }
 
-                    bool permenant = false;
-
-                    if (permenance != null)
-                    {
-                        permenant = permenance.Truths[col, row];
-                    }
+                    bool permenant = _values.Permenance.Truths[col, row];
 
                     rowData[col] = new CellData(_values.Matrix[col, row], cornerData.ToArray(), permenant);
                 }

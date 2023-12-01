@@ -146,5 +146,25 @@ namespace DokuApp.Model.Builder
 
             return results;
         }
+
+        /// <summary>
+        /// Takes in possibilities matrix and returns array of truths at specified index
+        /// </summary>
+        /// <param name="matricies">Target matricies.</param>
+        /// <param name="index">Target index.</param>
+        /// <returns>result[i] = matrix[i][@index]</returns>
+        public static bool[] LogicalPossibilities(LogicMatrix[] matricies, int index)
+        {
+            (int col, int row) = CellPosition.Index(index);
+
+            bool[] results = new bool[9];
+
+            for (int i = 0; i < 9; i++)
+            {
+                results[i] = matricies[i].Truths[col, row];
+            }
+
+            return results;
+        }
     }
 }
