@@ -51,7 +51,7 @@ namespace DokuApp.Model.UI
                 new SudokuStrategy(),
                 new NakedSinglesStrategy(),
                 new SinglesStrategy(),
-                new DoubleTripleStrategy(),
+                new PointingDoubleTripleStrategy(),
             };
         }
 
@@ -196,14 +196,13 @@ namespace DokuApp.Model.UI
                 bool result = _strategies[i].Solve(_sudokuMatrix);
                 if (result)
                 {
+                    SetGrid();
                     i = 0;
                     continue;
                 }
 
                 i++;
             }
-
-            SetGrid();
         }
 
         private void ClearNumberGrid(object? sender, RoutedEventArgs e)

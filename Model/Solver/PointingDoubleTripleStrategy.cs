@@ -3,25 +3,23 @@ using DokuApp.Model.Data;
 using System.Collections.Generic;
 using System;
 using System.Linq;
-using System.Diagnostics;
 
 namespace DokuApp.Model.Solver
 {
-    class DoubleTripleStrategy : Strategy
+    class PointingDoubleTripleStrategy : Strategy
     {
-        public DoubleTripleStrategy() 
+        public PointingDoubleTripleStrategy() 
         {
             return;
         }
 
         protected override string GetName()
         {
-            return "Double/Triple";
+            return "Pointing Double/Triple";
         }
 
         public override bool Solve(SudokuMatrix gameboard)
         {
-            Debug.WriteLine("DoubleTriple New Cycle:");
             for (int target = 0; target < 9; target++)
             {
                 LogicMatrix board = gameboard.Options[target];

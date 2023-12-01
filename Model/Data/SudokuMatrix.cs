@@ -36,6 +36,11 @@ namespace DokuApp.Model.Data
             }
         }
         
+        /// <summary>
+        /// Sets the corner possibility to true.
+        /// </summary>
+        /// <param name="position">Target cell.</param>
+        /// <param name="corner">Target number.</param>
         public void AddCorner(Tuple<int, int> position, int corner)
         {
             _options[corner - 1].Flip(LogicBuilder.Cell(position));
@@ -72,10 +77,14 @@ namespace DokuApp.Model.Data
             return data;
         }
 
-        // Setters
+        /// <summary>
+        /// Set a whole option board to a new LogicMatrix.
+        /// </summary>
+        /// <param name="newOption">New board.</param>
+        /// <param name="target">Targeted number. Must be between 0 and 8 to apply.</param>
         public void SetOption(LogicMatrix newOption, int target)
         {
-            if (target < 0 || target >= 9 || newOption == null)
+            if (target < 0 || target > 8 || newOption == null)
             {
                 return;
             }
@@ -83,6 +92,10 @@ namespace DokuApp.Model.Data
             _options[target] = newOption;
         }
 
+        /// <summary>
+        /// Set the ValueMatrix to a new ValueMatrix.
+        /// </summary>
+        /// <param name="newValues">New matrix.</param>
         public void SetValues(NumericalMatrix newValues)
         {
             if (newValues == null)
@@ -91,6 +104,29 @@ namespace DokuApp.Model.Data
             }
 
             _values = newValues;
+        }
+
+        /// <summary>
+        /// Overlaps all selected option matricies with LogicMatrix addition.
+        /// </summary>
+        /// <param name="selections">Selected options to overlap. Make sure all are between 0 and 8.</param>
+        /// <returns>Returns logic matrix of added matricies.</returns>
+        public LogicMatrix OverlapOptions(int[] selections)
+        {
+            if (selections.Length <= 0)
+            {
+                return new LogicMatrix();
+            }
+
+            // copy matrix to new matrix to not edit itself
+            LogicMatrix primary = new LogicMatrix(_options[selections[0]].Truths);
+
+            for (int i = 1; i < selections.Length; i++)
+            {
+                primary.Add(_options[selections[i]]);
+            }
+
+            return primary;
         }
     }
 }
