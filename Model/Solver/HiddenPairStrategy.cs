@@ -4,14 +4,14 @@ namespace DokuApp.Model.Solver
 {
     internal class HiddenPairStrategy : HiddenSetStrategy
     {
+        public HiddenPairStrategy()
+        {
+            _multi = 2;
+        }
+
         protected override string GetName()
         {
             return "Hidden Pairs";
-        }
-
-        public override bool Solve(SudokuMatrix gameboard)
-        {
-            return HiddenMultiSolution(2, gameboard);
         }
     }
 }

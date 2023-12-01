@@ -105,28 +105,5 @@ namespace DokuApp.Model.Data
 
             _values = newValues;
         }
-
-        /// <summary>
-        /// Overlaps all selected option matricies with LogicMatrix addition.
-        /// </summary>
-        /// <param name="selections">Selected options to overlap. Make sure all are between 0 and 8.</param>
-        /// <returns>Returns logic matrix of added matricies.</returns>
-        public LogicMatrix OverlapOptions(int[] selections)
-        {
-            if (selections.Length <= 0)
-            {
-                return new LogicMatrix();
-            }
-
-            // copy matrix to new matrix to not edit itself
-            LogicMatrix primary = new LogicMatrix(_options[selections[0]].Truths);
-
-            for (int i = 1; i < selections.Length; i++)
-            {
-                primary.Add(_options[selections[i]]);
-            }
-
-            return primary;
-        }
     }
 }

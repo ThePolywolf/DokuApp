@@ -1,5 +1,6 @@
 ﻿using DokuApp.Model.Data;
 using System;
+using System.Linq;
 
 namespace DokuApp.Model.Builder
 {
@@ -165,6 +166,53 @@ namespace DokuApp.Model.Builder
             }
 
             return results;
+        }
+
+        /// <summary>
+        /// Overlaps all selected option matricies with LogicMatrix addition.
+        /// </summary>
+        /// <param name="gameboard">Target gameboard for the options.</param>
+        /// <param name="selections">Selected options to overlap. Make sure all are between 0 and 8.</param>
+        /// <returns>Returns logic matrix of added matricies.</returns>
+        public static LogicMatrix OverlapOptions(SudokuMatrix gameboard, int[] selections)
+        {
+            if (selections.Length <= 0)
+            {
+                return new LogicMatrix();
+            }
+
+            LogicMatrix primary = new LogicMatrix();
+
+            for (int i = 0; i < selections.Length; i++)
+            {
+                primary.Add(gameboard.Options[selections[i]]);
+            }
+
+            return primary;
+        }
+
+        /// <summary>
+        /// Overlaps all options except the selections' option matricies with LogicMatrix addition.
+        /// </summary>
+        /// <param name="gameboard">Target gameboard for the options.</param>
+        /// <param name="selections">Selected options to NOT overlap. Should be between 0 and 8.</param>
+        /// <returns>Returns logic matrix of added excepted matricies.</returns>
+        public static LogicMatrix ExceptOverlapOptions(SudokuMatrix gameboard, int[] selections)
+        {
+            LogicMatrix primary = new LogicMatrix();
+
+            for (int i = 0; i < 9; i++)
+            {
+                // skip selection option matricies
+                if (selections.Contains(i))
+                {
+                    continue;
+                }
+
+                primary.Add(gameboard.Options[selections[i]]);
+            }
+
+            return primary;
         }
     }
 }

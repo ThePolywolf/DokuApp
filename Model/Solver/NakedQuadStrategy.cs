@@ -1,15 +1,15 @@
 ﻿namespace DokuApp.Model.Solver
 {
-    internal class HiddenQuadStrategy : HiddenSetStrategy
+    internal class NakedQuadStrategy : NakedSetStrategy
     {
-        public HiddenQuadStrategy()
+        public NakedQuadStrategy()
         {
             _multi = 4;
         }
 
         protected override string GetName()
         {
-            return "Hidden Quads";
+            return "Naked Quad";
         }
     }
 }
