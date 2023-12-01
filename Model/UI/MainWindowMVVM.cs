@@ -52,6 +52,8 @@ namespace DokuApp.Model.UI
                 new NakedSinglesStrategy(),
                 new SinglesStrategy(),
                 new PointingDoubleTripleStrategy(),
+                new NakedHiddenPairStrategy(),
+                new NakedHiddenTripleStrategy(),
             };
         }
 
