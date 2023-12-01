@@ -6,15 +6,15 @@ using System.Linq;
 
 namespace DokuApp.Model.Solver
 {
-    abstract class NakedHiddenSetStrategy : Strategy
+    abstract class HiddenSetStrategy : Strategy
     {
         /// <summary>
-        /// Solves the gameboard for a specified multi (pair, triple, etc.).
+        /// Solves the gameboard for a specified Hidden multi-sets (pair, triple, etc.).
         /// </summary>
         /// <param name="multi">Multi match to target (pair, triple, etc.)</param>
         /// <param name="gameboard">Gameboard to ater.</param>
         /// <returns>Only true if a multi-match was found (gameboard was edited).</returns>
-        protected bool MultiSolution(int multi, SudokuMatrix gameboard)
+        protected bool HiddenMultiSolution(int multi, SudokuMatrix gameboard)
         {
             List<int[]> AllPairingOptions = AllMultiSets(multi);
 

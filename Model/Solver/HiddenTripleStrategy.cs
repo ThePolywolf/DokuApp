@@ -1,17 +1,17 @@
-﻿using DokuApp.Model.Data;
+using DokuApp.Model.Data;
 
 namespace DokuApp.Model.Solver
 {
-    internal class NakedHiddenPairStrategy : NakedHiddenSetStrategy
+    internal class HiddenTripleStrategy : HiddenSetStrategy
     {
         protected override string GetName()
         {
-            return "Pairs";
+            return "Hidden Triples";
         }
 
         public override bool Solve(SudokuMatrix gameboard)
         {
-            return MultiSolution(2, gameboard);
+            return HiddenMultiSolution(3, gameboard);
         }
     }
 }
