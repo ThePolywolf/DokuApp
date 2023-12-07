@@ -105,5 +105,54 @@ namespace DokuApp.Model.Data
 
             _values = newValues;
         }
+
+        private int[] CellOptions(Tuple<int, int> cell)
+        {
+            List<int> cellOptions = new();
+
+            for (int i = 0; i < 9; i++)
+            {
+                if (_options[i].IsCellTrue(cell))
+                {
+                    cellOptions.Add(i);
+                }
+            }
+
+            return cellOptions.ToArray();
+        }
+
+        /// <summary>
+        /// Sets the cell options to only the setters.
+        /// </summary>
+        /// <param name="cell">Target cell.</param>
+        /// <param name="setters">Only corenr values to assign to the cell.</param>
+        /// <returns>Returns true if corner values are changed, and returns false if there was no change to the data.</returns>
+        public bool SetCellExclusive(Tuple<int, int> cell, int[] setters)
+        {
+            int[] oldOptions = CellOptions(cell);
+
+            // clear cell options
+            for (int i = 0; i < 9; i++)
+            {
+                _options[i].SetCell(cell, false);
+            }
+
+            foreach (int setter in setters)
+            {
+                if (setter < 0 || setter > 8)
+                {
+                    continue;
+                }
+
+                _options[setter].SetCell(cell, true);
+            }
+
+            if (oldOptions == CellOptions(cell))
+            {
+                return false;
+            }
+
+            return true;
+        }
     }
 }

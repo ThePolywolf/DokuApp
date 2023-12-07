@@ -73,6 +73,11 @@ namespace DokuApp.Model.Data
                 return false;
             }
 
+            if (_matrix[col, row] == 0)
+            {
+                return false;
+            }
+
             _matrix[col, row] = 0;
             _numberPermenance.SetCell(cell, false);
             return true;

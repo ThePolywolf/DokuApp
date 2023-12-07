@@ -12,8 +12,8 @@ namespace DokuApp.Model.Solver
         /// <summary>
         /// Solves the gameboard for a specified Hidden multi-sets (pair, triple, etc.).
         /// </summary>
-        /// <param name="gameboard">Gameboard to ater.</param>
-        /// <returns>Only true if a Hidden set was found (gameboard was changed)</returns>
+        /// <param name="gameboard">Gameboard to alter.</param>
+        /// <returns>Only true if a Hidden set was found (gameboard was changed).</returns>
         public override bool Solve(SudokuMatrix gameboard)
         {
             List<int[]> allPairingOptions = AllMultiSets(_multi);
@@ -94,23 +94,18 @@ namespace DokuApp.Model.Solver
         /// <param name="cells">Cells to target for removal.</param>
         /// <param name="gameboard">Sudoku matrix getting changed.</param>
         /// <returns>Boolean: true if any changes were made to existing logic.</returns>
-        private static bool ClearCellsForMulti(int[] multiSet, Tuple<int, int>[] cells, SudokuMatrix gameboard)
+        private bool ClearCellsForMulti(int[] multiSet, Tuple<int, int>[] cells, SudokuMatrix gameboard)
         {
             bool changed = false;
 
-            for (int number = 0; number < 9; number++)
-            {
-                // skip number clearing if part of the multi set
-                if (multiSet.Contains(number))
-                {
-                    continue;
-                }
+            Debug.WriteLine($"\nHidden {_multi} Targets:");
+            Debug.WriteLine($" - set [{string.Join(",", multiSet)}]");
 
-                // disable the possibility in the cell
-                foreach (Tuple<int, int> cell in cells)
-                {
-                    changed |= gameboard.Options[number].SetCell(cell, false);
-                }
+            foreach (Tuple<int, int> cell in cells)
+            {
+                Debug.WriteLine($" - col {cell.Item1}, row {cell.Item2}");
+
+                changed |= gameboard.SetCellExclusive(cell, multiSet);
             }
 
             return changed;

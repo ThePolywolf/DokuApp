@@ -4,6 +4,7 @@ using System.Windows.Input;
 using System.Windows;
 using System;
 using System.Diagnostics;
+using DokuApp.Model.Builder;
 
 namespace DokuApp.Model.UI
 {
@@ -49,15 +50,15 @@ namespace DokuApp.Model.UI
 
             // set up strategies
             _strategies = new Strategy[] {
-                new NakedSinglesStrategy(),
                 new SudokuStrategy(),
+                new NakedSinglesStrategy(),
                 new SinglesStrategy(),
                 new PointingDoubleTripleStrategy(),
-                //new NakedPairStrategy(),
+                new NakedPairStrategy(),
                 //new HiddenPairStrategy(),
-                //new NakedTripleStrategy(),
+                new NakedTripleStrategy(),
                 //new HiddenTripleStrategy(),
-                //new NakedQuadStrategy(),
+                new NakedQuadStrategy(),
                 //new HiddenQuadStrategy(),
             };
         }
@@ -126,7 +127,16 @@ namespace DokuApp.Model.UI
                     return;
                 }
 
-                _sudokuMatrix.Values.DeleteCell(position);
+                bool cellCleared = _sudokuMatrix.Values.DeleteCell(position);
+                
+                if (!cellCleared)
+                {
+                    for (int i = 0; i < 9; i++)
+                    {
+                        _sudokuMatrix.Options[i].SetCell(position, false);
+                    }
+                }
+                
                 SetGrid();
 
                 return;
