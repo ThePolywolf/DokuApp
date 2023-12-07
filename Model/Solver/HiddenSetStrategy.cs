@@ -3,7 +3,6 @@ using DokuApp.Model.Data;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 
 namespace DokuApp.Model.Solver
 {
@@ -20,6 +19,7 @@ namespace DokuApp.Model.Solver
 
             foreach (int[] pairingOptions in allPairingOptions)
             {
+                // pull out summed matrix --> box true if it contains any of the numbers part of the *triple*
                 LogicMatrix overlappedLogic = Extractor.OverlapOptions(gameboard, pairingOptions);
 
                 // loop through [row, column, box] 1-9 (0-8)
@@ -29,14 +29,15 @@ namespace DokuApp.Model.Solver
                     bool[] row = Extractor.LogicalRow(overlappedLogic, target);
                     if (SetHasMulti(row, out int[] rowCells))
                     {
-                        Tuple<int, int>[] targetCells = new Tuple<int, int>[_multi];
+                        List<Tuple<int, int>> targetCells = new();
 
-                        for (int i = 0; i < _multi; i++)
+                        foreach (int rowTarget in rowCells)
                         {
-                            targetCells[i] = Tuple.Create(rowCells[i], target);
+                            Tuple<int, int> position = Tuple.Create(rowTarget, target);
+                            targetCells.Add(position);
                         }
 
-                        bool changed = ClearCellsForMulti(pairingOptions, targetCells, gameboard);
+                        bool changed = ClearCellsForMulti(pairingOptions, targetCells.ToArray(), gameboard);
                         
                         if (changed)
                         {
@@ -48,14 +49,15 @@ namespace DokuApp.Model.Solver
                     bool[] col = Extractor.LogicalColumn(overlappedLogic, target);
                     if (SetHasMulti(col, out int[] colCells))
                     {
-                        Tuple<int, int>[] targetCells = new Tuple<int, int>[_multi];
+                        List<Tuple<int, int>> targetCells = new();
 
-                        for (int i = 0; i < _multi; i++)
+                        foreach (int colTarget in colCells)
                         {
-                            targetCells[i] = Tuple.Create(target, colCells[i]);
+                            Tuple<int, int> position = Tuple.Create(target, colTarget);
+                            targetCells.Add(position);
                         }
 
-                        bool changed = ClearCellsForMulti(pairingOptions, targetCells, gameboard);
+                        bool changed = ClearCellsForMulti(pairingOptions, targetCells.ToArray(), gameboard);
                         
                         if (changed)
                         {
@@ -67,14 +69,15 @@ namespace DokuApp.Model.Solver
                     bool[] box = Extractor.LogicalBox(overlappedLogic, target);
                     if (SetHasMulti(box, out int[] boxCells))
                     {
-                        Tuple<int, int>[] targetCells = new Tuple<int, int>[_multi];
+                        List<Tuple<int, int>> targetCells = new();
 
-                        for (int i = 0; i < _multi; i++)
+                        foreach (int cellTarget in boxCells)
                         {
-                            targetCells[i] = CellPosition.BoxCell(target, boxCells[i]);
+                            Tuple<int, int> position = CellPosition.BoxCell(target, cellTarget);
+                            targetCells.Add(position);
                         }
 
-                        bool changed = ClearCellsForMulti(pairingOptions, targetCells, gameboard);
+                        bool changed = ClearCellsForMulti(pairingOptions, targetCells.ToArray(), gameboard);
                         
                         if (changed)
                         {
@@ -98,13 +101,8 @@ namespace DokuApp.Model.Solver
         {
             bool changed = false;
 
-            Debug.WriteLine($"\nHidden {_multi} Targets:");
-            Debug.WriteLine($" - set [{string.Join(",", multiSet)}]");
-
             foreach (Tuple<int, int> cell in cells)
             {
-                Debug.WriteLine($" - col {cell.Item1}, row {cell.Item2}");
-
                 changed |= gameboard.SetCellExclusive(cell, multiSet);
             }
 

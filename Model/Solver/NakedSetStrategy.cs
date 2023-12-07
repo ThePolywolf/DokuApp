@@ -3,7 +3,6 @@ using DokuApp.Model.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Diagnostics;
 
 namespace DokuApp.Model.Solver
 {
@@ -116,16 +115,12 @@ namespace DokuApp.Model.Solver
         }
 
         // change back to static after debugging
-        private bool ChangeCells(Tuple<int, int>[] cells, int[] matchSet, SudokuMatrix gameboard)
+        private static bool ChangeCells(Tuple<int, int>[] cells, int[] matchSet, SudokuMatrix gameboard)
         {
             bool change = false;
 
-            Debug.WriteLine($"\nNaked {_multi} Targets:");
-
             foreach (Tuple<int, int> cell in cells)
             {
-                Debug.WriteLine($" - col {cell.Item1}, row {cell.Item2}");
-
                 // remove all the numbers in the *triple* from non-*triple* cells
                 foreach (int matchNumber in matchSet)
                 {

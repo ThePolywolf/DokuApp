@@ -55,11 +55,11 @@ namespace DokuApp.Model.UI
                 new SinglesStrategy(),
                 new PointingDoubleTripleStrategy(),
                 new NakedPairStrategy(),
-                //new HiddenPairStrategy(),
+                new HiddenPairStrategy(),
                 new NakedTripleStrategy(),
-                //new HiddenTripleStrategy(),
+                new HiddenTripleStrategy(),
                 new NakedQuadStrategy(),
-                //new HiddenQuadStrategy(),
+                new HiddenQuadStrategy(),
             };
         }
 
