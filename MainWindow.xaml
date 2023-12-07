@@ -48,7 +48,7 @@
                     <Button Click="FullClearGrid" Content="Clear Grid (All)" Grid.Row="3" Grid.Column="1" FontSize="20" Margin="5" BorderThickness="5" BorderBrush="Black"/>
                 </Grid>
 
-                <TextBlock Name="LastSolutionText" Grid.Row="2" Text="Sample Last Solution Text" Margin="40, 0" FontSize="20"/>
+                <TextBlock Name="LastSolutionText" Grid.Row="2" Text="Sample Last Solution Text" Margin="40, 0" FontSize="13"/>
             </Grid>
         </Grid>
     </Grid>

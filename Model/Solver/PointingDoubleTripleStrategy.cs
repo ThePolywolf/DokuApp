@@ -67,7 +67,7 @@ namespace DokuApp.Model.Solver
                             List<Tuple<int, int>> cells = new();
                             foreach (int col in activeCols)
                             {
-                                cells.Add(Tuple.Create(row, col));
+                                cells.Add(Tuple.Create(col, row));
                             }
                             _lastChangedCells = LogicBuilder.Cells(cells.ToArray());
                             string type;
@@ -108,7 +108,7 @@ namespace DokuApp.Model.Solver
                             List<Tuple<int, int>> cells = new();
                             foreach (int row in activeRows)
                             {
-                                cells.Add(Tuple.Create(row, col));
+                                cells.Add(Tuple.Create(col, row));
                             }
                             _lastChangedCells = LogicBuilder.Cells(cells.ToArray());
                             string type;

@@ -7,9 +7,6 @@
              mc:Ignorable="d" 
              d:DesignHeight="70" d:DesignWidth="70">
     <Grid>
-        <Rectangle Fill="LightBlue" Height="5" VerticalAlignment="Top" HorizontalAlignment="Stretch"/>
-        <Rectangle Fill="LightBlue" Width="5" VerticalAlignment="Stretch" HorizontalAlignment="Left"/>
-        <Rectangle Fill="LightBlue" Height="5" VerticalAlignment="Bottom" HorizontalAlignment="Stretch"/>
-        <Rectangle Fill="LightBlue" Width="5" VerticalAlignment="Stretch" HorizontalAlignment="Right"/>
+        <Rectangle StrokeThickness="6" Stroke="CadetBlue" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
     </Grid>
 </UserControl>

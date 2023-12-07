@@ -7,6 +7,6 @@
              mc:Ignorable="d" 
              d:DesignHeight="70" d:DesignWidth="70">
     <Grid>
-        <Ellipse Width="18" Height="18" Fill="LightGreen" Margin="2" HorizontalAlignment="Right" VerticalAlignment="Bottom" StrokeThickness="2" Stroke="ForestGreen"/>
+        <Rectangle HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Stroke="ForestGreen" StrokeThickness="3"/>
     </Grid>
 </UserControl>
