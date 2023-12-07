@@ -3,8 +3,6 @@ using DokuApp.Model.Solver;
 using System.Windows.Input;
 using System.Windows;
 using System;
-using System.Diagnostics;
-using DokuApp.Model.Builder;
 
 namespace DokuApp.Model.UI
 {
@@ -17,6 +15,7 @@ namespace DokuApp.Model.UI
 
         private readonly Strategy[] _strategies;
 
+        private int _solutionStep;
         private bool _permenantEntry;
 
         public MainWindowMVVM(MainWindow mainWindow)
@@ -27,12 +26,14 @@ namespace DokuApp.Model.UI
             // attach events
             _window.WindowKeyDown += KeyDown;
             _window.WindowKeyUp += KeyUp;
+
             _window.WindowSolveGrid += SolveGrid;
             _window.WindowClearGrid += ClearGrid;
+            _window.WindowStepSolution += StepSolution;
             _window.WindowTotalClearGrid += TotalClearGrid;
             _window.WindowClearNumberGrid += ClearNumberGrid;
             _window.WindowClearPossibilitiesGrid += ClearPossibilitiesGrid;
-            _window.WindowsMarkCorners += MarkCorners;
+            _window.WindowMarkCorners += MarkCorners;
 
             // attach main window events
             _window.FullGrid.MouseSelection += GridClicked;
@@ -61,14 +62,24 @@ namespace DokuApp.Model.UI
                 new NakedQuadStrategy(),
                 new HiddenQuadStrategy(),
             };
+
+            // set current step to -1
+            _solutionStep = -1;
+            SetRecentStrategyText("", "");
         }
 
-        public void SetGrid()
+        public void SetGrid(LogicMatrix? solutionChanges = null)
         {
             _window.FullGrid.Values.SetGrid(_sudokuMatrix.CellData());
 
             LogicMatrix errors = NumericErrors.FindErrors(_sudokuMatrix.Values);
             _window.FullGrid.Errors.SetErrorCells(errors);
+
+            if (solutionChanges == null)
+            {
+                solutionChanges = new();
+            }
+            _window.FullGrid.SolutionChanges.SetChangesGrid(solutionChanges.Truths);
         }
 
         public void SetSelection()
@@ -119,6 +130,8 @@ namespace DokuApp.Model.UI
 
             if (e.Key == Key.Delete || e.Key == Key.Back)
             {
+                _solutionStep = -1;
+
                 Tuple<int, int> position = _selection.SingleSelection;
 
                 // if not in permenance mode, can't delete a permenant cell
@@ -145,6 +158,8 @@ namespace DokuApp.Model.UI
 
         private void SetCellValue(int number)
         {
+            _solutionStep = -1;
+
             if (Math.Clamp(number, 1, 9) != number)
             {
                 return;
@@ -204,6 +219,8 @@ namespace DokuApp.Model.UI
 
         private void SolveGrid(object? sender, RoutedEventArgs e)
         {
+            _solutionStep = -1;
+
             SolverSetup.StartingSudokuLogic(_sudokuMatrix);
 
             // Loops through each strategy, and on a succesful attempt restarts from the beginning.
@@ -213,7 +230,7 @@ namespace DokuApp.Model.UI
             {
                 count++;
 
-                if (count > 1000)
+                if (count > 10000)
                 {
                     break;
                 }
@@ -221,7 +238,7 @@ namespace DokuApp.Model.UI
                 bool result = _strategies[i].Solve(_sudokuMatrix);
                 if (result)
                 {
-                    Debug.WriteLine($"Solve - {_strategies[i].Name} @count-{count}");
+                    SetRecentStrategyText($"Solve - {_strategies[i].Name} @count-{count}");
 
                     i = 0;
                     continue;
@@ -233,8 +250,51 @@ namespace DokuApp.Model.UI
             SetGrid();
         }
 
+        private void StepSolution(object? sender, RoutedEventArgs e)
+        {
+            LogicMatrix changedCells = new();
+
+            if (_solutionStep < 0)
+            {
+                SolverSetup.StartingSudokuLogic(_sudokuMatrix);
+                _solutionStep = 0;
+            }
+
+            // Step to next strategy solve (if any)
+            for (int i = 0; i < _strategies.Length + 1; i++)
+            {
+                bool result = _strategies[_solutionStep].Solve(_sudokuMatrix);
+
+                if (result)
+                {
+                    SetRecentStrategyText($"Solve Found - {_strategies[_solutionStep].LastSolutionText}");
+                    changedCells = _strategies[_solutionStep].LastChangedCells;
+
+                    _solutionStep = 0;
+                    break;
+                }
+
+                _solutionStep++;
+
+                if (_solutionStep >= _strategies.Length)
+                {
+                    // next step resets from beginning
+                    _solutionStep = -1;
+
+                    break;
+                }
+            }
+
+            // re-sudoku board for accurate numbers
+            _strategies[0].Solve(_sudokuMatrix);
+
+            SetGrid(changedCells);
+        }
+
         private void ClearNumberGrid(object? sender, RoutedEventArgs e)
         {
+            _solutionStep = -1;
+
             _sudokuMatrix.Values.ClearImpermenantNumbers();
 
             SetGrid();
@@ -242,6 +302,8 @@ namespace DokuApp.Model.UI
 
         private void ClearPossibilitiesGrid(object? sender, RoutedEventArgs e)
         {
+            _solutionStep = -1;
+
             for (int i = 0; i < 9; i++)
             {
                 _sudokuMatrix.Options[i] = new LogicMatrix();
@@ -252,6 +314,8 @@ namespace DokuApp.Model.UI
 
         private void ClearGrid(object? sender, RoutedEventArgs e)
         {
+            _solutionStep = -1;
+
             ClearNumberGrid(sender, e);
             ClearPossibilitiesGrid(sender, e);
 
@@ -260,6 +324,8 @@ namespace DokuApp.Model.UI
 
         private void TotalClearGrid(object? sender, RoutedEventArgs e)
         {
+            _solutionStep = -1;
+
             _sudokuMatrix.Values.Reset();
             ClearPossibilitiesGrid(sender, e);
 
@@ -273,6 +339,11 @@ namespace DokuApp.Model.UI
             strategy.Solve(_sudokuMatrix);
 
             SetGrid();
+        }
+
+        private void SetRecentStrategyText(string newText, string prefix = "> ")
+        {
+            _window.LastSolutionText.Text = prefix + newText;
         }
     }
 }

@@ -2,9 +2,9 @@
 
 namespace DokuApp.View
 {
-    public partial class SelectionSingleBox : UserControl
+    public partial class SolutionChangeCell : UserControl
     {
-        public SelectionSingleBox()
+        public SolutionChangeCell()
         {
             InitializeComponent();
         }

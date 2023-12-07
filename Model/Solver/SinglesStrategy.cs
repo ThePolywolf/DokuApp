@@ -34,6 +34,8 @@ namespace DokuApp.Model.Solver
                         board.Subtract(LogicBuilder.CellExclusion(position));
                         gameboard.SetOption(board, target);
 
+                        _lastChangedCells = LogicBuilder.Cell(position);
+                        _lastSolutionText = $"{target + 1} Hidden Single in Box #{i + 1}";
                         return true;
                     }
 
@@ -51,6 +53,8 @@ namespace DokuApp.Model.Solver
                         board.Subtract(LogicBuilder.CellExclusion(position));
                         gameboard.SetOption(board, target);
 
+                        _lastChangedCells = LogicBuilder.Cell(position);
+                        _lastSolutionText = $"{target + 1} Hidden Single in Row #{i + 1}";
                         return true;
                     }
                     
@@ -68,11 +72,15 @@ namespace DokuApp.Model.Solver
                         board.Subtract(LogicBuilder.CellExclusion(position));
                         gameboard.SetOption(board, target);
 
+                        _lastChangedCells = LogicBuilder.Cell(position);
+                        _lastSolutionText = $"{target + 1} Hidden Single in Column #{i + 1}";
                         return true;
                     }
                 }
             }
 
+            _lastChangedCells = new();
+            _lastSolutionText = $"No solutions found (Hidden Single)";
             return false;
         }
 

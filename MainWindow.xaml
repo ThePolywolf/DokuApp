@@ -21,6 +21,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition/>
                     <RowDefinition/>
+                    <RowDefinition Height="25"/>
                 </Grid.RowDefinitions>
                 
                 <View:EntryDock x:Name="Entries" Grid.Row="0" Width="310"/>
@@ -39,13 +40,15 @@
 
                     <Button Click="SolveGrid" Content="Solve Sudoku" Grid.Row="0" Grid.Column="0" FontSize="20" Margin="5" BorderThickness="5" BorderBrush="Black"/>
                     <Button Click="MarkCorners" Content="Mark Corners" Grid.Row="0" Grid.Column="1" FontSize="20" Margin="5" BorderThickness="5" BorderBrush="Black"/>
+                    <Button Click="SolveStep" Content="Step >>>" Grid.Row="1" Grid.Column="1" FontSize="20" Margin="5" BorderThickness="5" BorderBrush="Black"/>
 
                     <Button Click="ClearNumbers" Content="Clear Numbers" Grid.Row="2" Grid.Column="0" FontSize="20" Margin="5" BorderThickness="5" BorderBrush="Black"/>
                     <Button Click="ClearPossibilities" Content="Clear Corners" Grid.Row="2" Grid.Column="1" FontSize="20" Margin="5" BorderThickness="5" BorderBrush="Black"/>
                     <Button Click="ClearGrid" Content="Clear Grid" Grid.Row="3" Grid.Column="0" FontSize="20" Margin="5" BorderThickness="5" BorderBrush="Black"/>
                     <Button Click="FullClearGrid" Content="Clear Grid (All)" Grid.Row="3" Grid.Column="1" FontSize="20" Margin="5" BorderThickness="5" BorderBrush="Black"/>
                 </Grid>
-                
+
+                <TextBlock Name="LastSolutionText" Grid.Row="2" Text="Sample Last Solution Text" Margin="40, 0" FontSize="20"/>
             </Grid>
         </Grid>
     </Grid>

@@ -13,7 +13,8 @@ namespace DokuApp
         public event EventHandler<KeyEventArgs>? WindowKeyUp;
 
         public event EventHandler<RoutedEventArgs>? WindowSolveGrid;
-        public event EventHandler<RoutedEventArgs>? WindowsMarkCorners;
+        public event EventHandler<RoutedEventArgs>? WindowMarkCorners;
+        public event EventHandler<RoutedEventArgs>? WindowStepSolution;
 
         public event EventHandler<RoutedEventArgs>? WindowClearGrid;
         public event EventHandler<RoutedEventArgs>? WindowTotalClearGrid;
@@ -64,7 +65,12 @@ namespace DokuApp
 
         private void MarkCorners(object sender, RoutedEventArgs e)
         {
-            WindowsMarkCorners?.Invoke(sender, e);
+            WindowMarkCorners?.Invoke(sender, e);
+        }
+
+        private void SolveStep(object sender, RoutedEventArgs e)
+        {
+            WindowStepSolution?.Invoke(sender, e);
         }
     }
 }

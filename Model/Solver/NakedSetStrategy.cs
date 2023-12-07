@@ -19,6 +19,13 @@ namespace DokuApp.Model.Solver
 
             foreach (int[] pairingOption in allPairingOptions)
             {
+                List<int> falsePairingSet = new();
+                foreach (int number in pairingOption)
+                {
+                    falsePairingSet.Add(number + 1);
+                }
+                string pairingSetString = $"[{string.Join(", ", falsePairingSet)}]";
+
                 // Get summed set logic sets
                 LogicMatrix activeCells = Extractor.OverlapOptions(gameboard, pairingOption);
                 LogicMatrix exceptActiveCells = Extractor.ExceptOverlapOptions(gameboard, pairingOption);
@@ -34,16 +41,19 @@ namespace DokuApp.Model.Solver
                     {
                         // remove each *triple* number possibility from the non-*triple* cells
                         List<Tuple<int, int>> targets = new();
+                        List<Tuple<int, int>> resultCells = new();
 
                         for (int iCol = 0; iCol < 9; iCol++)
                         {
+                            Tuple<int, int> position = Tuple.Create(iCol, target);
+                            
                             // skip safe columns i.e. cells containing the double/triple/etc.
                             if (safeCols.Contains(iCol))
                             {
+                                resultCells.Add(position);
                                 continue;
                             }
 
-                            Tuple<int, int> position = Tuple.Create(iCol, target);
                             targets.Add(position);
                         }
 
@@ -51,6 +61,8 @@ namespace DokuApp.Model.Solver
 
                         if (changeMade)
                         {
+                            _lastChangedCells = LogicBuilder.Cells(resultCells.ToArray());
+                            _lastSolutionText = $"{pairingSetString} Naked {_multi}-Set on Row #{target + 1}";
                             return true;
                         }
                     }
@@ -61,16 +73,19 @@ namespace DokuApp.Model.Solver
                     {
                         // remove each *triple* number possibility from the non-*triple* cells
                         List<Tuple<int, int>> targets = new();
+                        List<Tuple<int, int>> resultCells = new();
 
                         for (int iRow = 0; iRow < 9; iRow++)
                         {
+                            Tuple<int, int> position = Tuple.Create(target, iRow);
+
                             // skip safe rows
                             if (safeRows.Contains(iRow))
                             {
+                                resultCells.Add(position);
                                 continue;
                             }
 
-                            Tuple<int, int> position = Tuple.Create(target, iRow);
                             targets.Add(position);
                         }
 
@@ -78,6 +93,8 @@ namespace DokuApp.Model.Solver
 
                         if (changeMade)
                         {
+                            _lastChangedCells = LogicBuilder.Cells(resultCells.ToArray());
+                            _lastSolutionText = $"{pairingSetString} Naked {_multi}-Set on Col #{target + 1}";
                             return true;
                         }
                     }
@@ -88,16 +105,19 @@ namespace DokuApp.Model.Solver
                     {
                         // remove each *triple* number possibility from the non-*triple* cells
                         List<Tuple<int, int>> targets = new();
+                        List<Tuple<int, int>> resultCells = new();
 
                         for (int iCell = 0; iCell < 9; iCell++)
                         {
+                            Tuple<int, int> position = CellPosition.BoxCell(target, iCell);
+
                             // skip safe cells
                             if (safeCells.Contains(iCell))
                             {
+                                resultCells.Add(position);
                                 continue;
                             }
 
-                            Tuple<int, int> position = CellPosition.BoxCell(target, iCell);
                             targets.Add(position);
                         }
 
@@ -105,12 +125,15 @@ namespace DokuApp.Model.Solver
 
                         if (changeMade)
                         {
+                            _lastChangedCells = LogicBuilder.Cells(resultCells.ToArray());
+                            _lastSolutionText = $"{pairingSetString} Naked {_multi}-Set in Box #{target + 1}";
                             return true;
                         }
                     }
                 }
             }
 
+            _lastSolutionText = $"No solutions found (Naked {_multi}-Set)";
             return false;
         }
 

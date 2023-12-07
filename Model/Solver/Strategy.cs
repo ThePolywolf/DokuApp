@@ -6,6 +6,12 @@ namespace DokuApp.Model.Solver
     {
         public string Name { get { return $"{GetName()} Strategy"; } }
 
+        protected LogicMatrix _lastChangedCells;
+        public LogicMatrix LastChangedCells { get { return _lastChangedCells; } }
+
+        protected string _lastSolutionText;
+        public string LastSolutionText { get { return _lastSolutionText; } }
+
         /// <summary>
         /// Applies a strategy to the gameboard to narrow down possibilities.
         /// </summary>

@@ -15,9 +15,6 @@ namespace DokuApp.View
             int column = selection.Item1;
             int row = selection.Item2;
 
-            // re-show
-            SingleBox.Visibility = System.Windows.Visibility.Visible;
-
             column = Math.Clamp(column, 0, 8);
             row = Math.Clamp(row, 0, 8);
 
@@ -44,11 +41,6 @@ namespace DokuApp.View
 
             Grid.SetRow(SingleBox, viewRow);
             Grid.SetColumn(SingleBox, viewColumn);
-        }
-
-        public void HideSelection()
-        {
-            SingleBox.Visibility = System.Windows.Visibility.Hidden;
         }
     }
 }

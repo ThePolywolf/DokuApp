@@ -64,6 +64,22 @@ namespace DokuApp.Model.Solver
 
                             gameboard.SetOption(board, target);
 
+                            List<Tuple<int, int>> cells = new();
+                            foreach (int col in activeCols)
+                            {
+                                cells.Add(Tuple.Create(row, col));
+                            }
+                            _lastChangedCells = LogicBuilder.Cells(cells.ToArray());
+                            string type;
+                            if (activeCols.Count == 2)
+                            {
+                                type = "Pair";
+                            }
+                            else
+                            {
+                                type = "Triple";
+                            }
+                            _lastSolutionText = $"{target + 1} Pointing-{type} in Box #{box + 1}, Row #{row + 1}";
                             return true;
                         }
                     }
@@ -89,12 +105,30 @@ namespace DokuApp.Model.Solver
 
                             gameboard.SetOption(board, target);
 
+                            List<Tuple<int, int>> cells = new();
+                            foreach (int row in activeRows)
+                            {
+                                cells.Add(Tuple.Create(row, col));
+                            }
+                            _lastChangedCells = LogicBuilder.Cells(cells.ToArray());
+                            string type;
+                            if (activeRows.Count == 2)
+                            {
+                                type = "Pair";
+                            }
+                            else
+                            {
+                                type = "Triple";
+                            }
+                            _lastSolutionText = $"{target + 1} Pointing-{type} in Box #{box + 1}, Column #{col + 1}";
                             return true;
                         }
                     }
                 }
             }
 
+            _lastChangedCells = new();
+            _lastSolutionText = $"No solutions found (Pointing Pairs)";
             return false;
         }
 

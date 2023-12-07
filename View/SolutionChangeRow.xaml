@@ -1,0 +1,36 @@
+﻿<UserControl x:Class="DokuApp.View.SolutionChangeRow"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DokuApp.View"
+             mc:Ignorable="d" 
+             d:DesignHeight="60" d:DesignWidth="560">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="5"/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="5"/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <local:SolutionChangeCell x:Name="Box1" Grid.Column="0" Visibility="Visible"/>
+        <local:SolutionChangeCell x:Name="Box2" Grid.Column="1" Visibility="Visible"/>
+        <local:SolutionChangeCell x:Name="Box3" Grid.Column="2" Visibility="Visible"/>
+        
+        <local:SolutionChangeCell x:Name="Box4" Grid.Column="4" Visibility="Visible"/>
+        <local:SolutionChangeCell x:Name="Box5" Grid.Column="5" Visibility="Visible"/>
+        <local:SolutionChangeCell x:Name="Box6" Grid.Column="6" Visibility="Visible"/>
+        
+        <local:SolutionChangeCell x:Name="Box7" Grid.Column="8" Visibility="Visible"/>
+        <local:SolutionChangeCell x:Name="Box8" Grid.Column="9" Visibility="Visible"/>
+        <local:SolutionChangeCell x:Name="Box9" Grid.Column="10" Visibility="Visible"/>
+    </Grid>
+</UserControl>

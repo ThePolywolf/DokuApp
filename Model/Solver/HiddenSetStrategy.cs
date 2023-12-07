@@ -2,7 +2,6 @@
 using DokuApp.Model.Data;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace DokuApp.Model.Solver
 {
@@ -19,6 +18,13 @@ namespace DokuApp.Model.Solver
 
             foreach (int[] pairingOptions in allPairingOptions)
             {
+                List<int> falsePairingSet = new();
+                foreach (int number in pairingOptions)
+                {
+                    falsePairingSet.Add(number + 1);
+                }
+                string pairingSetString = $"[{string.Join(", ", falsePairingSet)}]";
+
                 // pull out summed matrix --> box true if it contains any of the numbers part of the *triple*
                 LogicMatrix overlappedLogic = Extractor.OverlapOptions(gameboard, pairingOptions);
 
@@ -41,6 +47,8 @@ namespace DokuApp.Model.Solver
                         
                         if (changed)
                         {
+                            _lastChangedCells = LogicBuilder.Cells(targetCells.ToArray());
+                            _lastSolutionText = $"{pairingSetString} Hidden {_multi}-Set on Row #{target + 1}";
                             return true;
                         }
                     }
@@ -61,6 +69,8 @@ namespace DokuApp.Model.Solver
                         
                         if (changed)
                         {
+                            _lastChangedCells = LogicBuilder.Cells(targetCells.ToArray());
+                            _lastSolutionText = $"{pairingSetString} Hidden {_multi}-Set on Column #{target + 1}";
                             return true;
                         }
                     }
@@ -81,12 +91,15 @@ namespace DokuApp.Model.Solver
                         
                         if (changed)
                         {
+                            _lastChangedCells = LogicBuilder.Cells(targetCells.ToArray());
+                            _lastSolutionText = $"{pairingSetString} Hidden {_multi}-Set in Box #{target + 1}";
                             return true;
                         }
                     }
                 }
             }
 
+            _lastSolutionText = $"No solutions found (Hidden {_multi}-Set)";
             return false;
         }
 
